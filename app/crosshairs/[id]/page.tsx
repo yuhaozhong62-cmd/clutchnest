@@ -60,14 +60,13 @@ export default async function CrosshairPage({ params }: CrosshairPageProps) {
   if (!crosshair) notFound();
 
   return (
-    <div className="mx-auto max-w-6xl px-5 py-10 sm:py-16">
+    <div className="mx-auto max-w-6xl px-5 py-10 sm:py-20">
       <Link
         href="/crosshairs"
         className="inline-flex items-center gap-2 text-sm text-zinc-400 transition hover:text-white focus:outline-none focus:ring-2 focus:ring-white/30"
       >
         <span aria-hidden="true">←</span>
         <span>返回准星库</span>
-        <span className="text-xs text-zinc-600">Back to Crosshair Library</span>
       </Link>
       <CrosshairDetail crosshair={crosshair} />
     </div>

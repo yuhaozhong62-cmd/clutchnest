@@ -9,23 +9,14 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <div className="mx-auto max-w-6xl px-5 py-16">
-      <section className="grid gap-10 rounded-lg border border-white/10 bg-panel/70 p-7 shadow-glow lg:grid-cols-[0.9fr_1.1fr] lg:p-10">
-        <div>
-          <p className="text-xs uppercase tracking-[0.3em] text-valorant">关于 / About</p>
-          <h1 className="mt-4 text-5xl font-black text-white">ClutchNest</h1>
-          <p className="mt-4 text-sm text-zinc-400">由 HAO 创建</p>
-          <p className="mt-1 text-xs text-zinc-600">Created by HAO</p>
-        </div>
-        <div className="space-y-6 text-base leading-8 text-zinc-300">
+    <div className="mx-auto max-w-6xl px-5 py-16 sm:py-24">
+      <section className="max-w-3xl">
+        <h1 className="text-4xl font-black text-white sm:text-5xl">关于 ClutchNest</h1>
+        <div className="mt-10 space-y-6 text-base leading-8 text-zinc-300 sm:text-lg">
           <p>ClutchNest 是一个由 HAO 创建的 Valorant 个人知识库。</p>
-          <p>
-            这个网站不是为了堆大量资料，而是为了记录和分享真正经过实战测试的准星、地图点位、英雄理解和游戏思路。
-          </p>
-          <p>
-            我希望它慢慢成长成一个干净、实用、有个人风格的 Valorant 学习空间。
-          </p>
-          <p className="text-zinc-500">Quality over quantity.</p>
+          <p>这里分享经过实战测试的准星、职业选手公开设置、地图点位和个人游戏理解。</p>
+          <p>内容会持续更新，但始终坚持质量优先。</p>
+          <p className="pt-3 text-sm text-zinc-600">Quality over quantity.</p>
         </div>
       </section>
     </div>

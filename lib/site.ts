@@ -14,7 +14,7 @@ export const site = {
   taglineEn: "Learn. Improve. Clutch.",
   nav: [
     { labelCn: "首页", labelEn: "Home", href: "/" },
-    { labelCn: "准星", labelEn: "Crosshairs", href: "/crosshairs" },
+    { labelCn: "准星库", labelEn: "Crosshairs", href: "/crosshairs" },
     { labelCn: "英雄与地图", labelEn: "Agents & Maps", href: "/agents-maps" },
     { labelCn: "关于", labelEn: "About", href: "/about" }
   ]

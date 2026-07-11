@@ -21,10 +21,7 @@ export function SiteHeader() {
           <span className="flex h-9 w-9 items-center justify-center rounded-md border border-white/15 bg-white text-sm font-black text-black transition duration-300 group-hover:border-valorant group-hover:bg-valorant group-hover:text-white">
             CN
           </span>
-          <span>
-            <span className="block text-sm font-semibold tracking-[0.18em] text-white">CLUTCHNEST</span>
-            <span className="block text-[11px] text-mist">{site.taglineEn}</span>
-          </span>
+          <span className="text-sm font-semibold tracking-[0.14em] text-white">CLUTCHNEST</span>
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex" aria-label="Main navigation">
@@ -70,7 +67,6 @@ export function SiteHeader() {
               }`}
             >
               {item.labelCn}
-              <span className="ml-2 text-xs opacity-60">{item.labelEn}</span>
             </Link>
           ))}
         </nav>
@@ -94,7 +90,6 @@ function NavLink({
       }`}
     >
       {item.labelCn}
-      <span className="ml-1 text-zinc-600 transition group-hover:text-zinc-400">{item.labelEn}</span>
       <span
         className={`absolute inset-x-4 -bottom-px h-px bg-valorant transition duration-300 ${
           active ? "opacity-100" : "opacity-0 group-hover:opacity-70"
