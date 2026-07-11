@@ -1,0 +1,23 @@
+# Dependencies and builds
+node_modules/
+.next/
+out/
+.vercel/
+
+# Environment files
+.env*
+!.env.example
+
+# Local logs and generated work files
+*.log
+work/
+outputs/
+
+# Editor and operating system files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# TypeScript
+*.tsbuildinfo
