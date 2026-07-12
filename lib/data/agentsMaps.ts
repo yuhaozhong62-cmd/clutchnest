@@ -5,12 +5,6 @@ export type Agent = {
   summary: string;
 };
 
-export type ValorantMap = {
-  id: string;
-  name: string;
-  summary: string;
-};
-
 export type LineupPoint = {
   id: string;
   name: string;
@@ -44,24 +38,6 @@ export const agents: Agent[] = [
     name: "Omen",
     role: "Controller / 控场位",
     summary: "用烟和假动作切割视野，给队友制造进点窗口。"
-  }
-];
-
-export const maps: ValorantMap[] = [
-  {
-    id: "ascent",
-    name: "Ascent",
-    summary: "中路控制价值很高，攻防转换都依赖信息节奏。"
-  },
-  {
-    id: "bind",
-    name: "Bind",
-    summary: "传送门让转点更快，控图和假打的收益很高。"
-  },
-  {
-    id: "haven",
-    name: "Haven",
-    summary: "三包点地图，防守站位和回防沟通非常关键。"
   }
 ];
 
@@ -193,3 +169,5 @@ export const lineupPoints: LineupPoint[] = [
     bestFor: "适合 C 点夹击、假打转 C 和需要控制 Garage 枢纽时使用。"
   }
 ];
+export { currentMaps as maps } from "@/lib/data/maps";
+export type { ValorantMap } from "@/lib/data/maps";

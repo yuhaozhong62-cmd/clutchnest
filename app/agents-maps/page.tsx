@@ -3,7 +3,7 @@ import { AgentsMapExplorer } from "@/components/AgentsMapExplorer";
 
 export const metadata: Metadata = {
   title: "英雄与地图 / Agents & Maps",
-  description: "选择英雄和地图，查看 Valorant 点位、控图思路与实战打法。",
+  description: "查看当前 Valorant 竞技地图池、英雄策略、互动地图指南与 HAO 的游戏理解。",
   alternates: { canonical: "/agents-maps" },
   openGraph: { url: "/agents-maps" }
 };
@@ -24,6 +24,10 @@ export default function AgentsMapsPage() {
       <div className="mt-10">
         <AgentsMapExplorer />
       </div>
+      <p className="mt-16 border-t border-white/10 pt-6 text-xs leading-6 text-zinc-600">
+        地图名称与地图图像素材归 Riot Games 所有。ClutchNest 是独立的非商业玩家项目。
+        <span className="mt-1 block text-zinc-700">Map names and imagery are property of Riot Games. ClutchNest is an independent, non-commercial fan project.</span>
+      </p>
     </div>
   );
 }
