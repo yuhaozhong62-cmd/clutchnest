@@ -1,9 +1,5 @@
-export type Agent = {
-  id: string;
-  name: string;
-  role: string;
-  summary: string;
-};
+export { publishedAgents as agents } from "@/lib/data/agents";
+export type { ValorantAgent as Agent } from "@/lib/data/agents";
 
 export type LineupPoint = {
   id: string;
@@ -19,27 +15,6 @@ export type LineupPoint = {
   cons: string[];
   bestFor: string;
 };
-
-export const agents: Agent[] = [
-  {
-    id: "sova",
-    name: "Sova",
-    role: "Initiator / 信息位",
-    summary: "用侦察和压迫节奏帮助队伍提前做决策。"
-  },
-  {
-    id: "jett",
-    name: "Jett",
-    role: "Duelist / 决斗位",
-    summary: "依靠机动性抢第一接触，把空间换成击杀机会。"
-  },
-  {
-    id: "omen",
-    name: "Omen",
-    role: "Controller / 控场位",
-    summary: "用烟和假动作切割视野，给队友制造进点窗口。"
-  }
-];
 
 export const lineupPoints: LineupPoint[] = [
   {
