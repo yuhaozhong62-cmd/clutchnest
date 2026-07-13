@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import { agents, lineupPoints, maps, type LineupPoint, type ValorantMap } from "@/lib/data/agentsMaps";
@@ -28,6 +29,7 @@ export function AgentsMapExplorer() {
   const selectedAgent = agents.find((agent) => agent.id === agentId) ?? agents[0];
   const selectedMap = maps.find((map) => map.id === mapId) ?? maps[0];
   const sentinelCount = agents.filter((agent) => agent.role === "sentinel").length;
+  const tacticalGuideHref = agentId === "cypher" && mapId === "ascent" ? "/agents/cypher/ascent" : undefined;
 
   function selectAgent(nextId: string, advance = false) {
     setAgentId(nextId);
@@ -86,6 +88,7 @@ export function AgentsMapExplorer() {
                 />
               )) : <EmptyPoints />}
             </SelectionGroup>
+            {tacticalGuideHref ? <TacticalGuideLink href={tacticalGuideHref} /> : null}
           </aside>
 
           <main className="min-w-0 space-y-6">
@@ -130,6 +133,7 @@ export function AgentsMapExplorer() {
           ) : (
             <div>
               <EmptyPoints />
+              {tacticalGuideHref ? <TacticalGuideLink href={tacticalGuideHref} /> : null}
               <button
                 type="button"
                 onClick={() => setMobileStep("strategy")}
@@ -421,6 +425,18 @@ function EmptyStrategy({ agent, map }: { agent: string; map: string }) {
       <h2 className="mt-3 text-xl font-semibold text-white">这个英雄在这张地图上暂时还没有攻略。</h2>
       <p className="mt-3 text-sm leading-7 text-zinc-500">HAO 会在实战测试后逐步加入点位、守点思路与技能用法。</p>
     </article>
+  );
+}
+
+function TacticalGuideLink({ href }: { href: string }) {
+  return (
+    <Link href={href} className="mt-4 flex min-h-11 w-full items-center justify-between rounded-md border border-valorant/50 bg-valorant/[0.08] px-4 py-3 text-sm font-semibold text-white transition hover:border-valorant hover:bg-valorant/[0.13] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40">
+      <span>
+        <span className="block">查看保安 × 空岛完整攻略</span>
+        <span className="mt-1 block text-[10px] font-normal text-zinc-500">Cypher × Ascent Tactical Guide</span>
+      </span>
+      <span aria-hidden="true">→</span>
+    </Link>
   );
 }
 
