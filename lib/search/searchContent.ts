@@ -14,6 +14,11 @@ function containsTerm(value: string, term: string) {
   return value.includes(term);
 }
 
+function compareText(a: string, b: string) {
+  if (a === b) return 0;
+  return a < b ? -1 : 1;
+}
+
 function scoreTerm(item: SearchIndexItem, term: string, broadSingleHan: boolean) {
   const title = normalizeSearchQuery(item.title);
   const aliases = normalized(item.aliases);
@@ -63,7 +68,9 @@ export function searchContent(
       return { item, score, matchedTerms: terms };
     })
     .filter((result): result is SearchResult => Boolean(result))
-    .sort((a, b) => b.score - a.score || (b.item.updatedAt ?? "").localeCompare(a.item.updatedAt ?? "") || a.item.title.localeCompare(b.item.title));
+    .sort((a, b) => b.score - a.score
+      || compareText(b.item.updatedAt ?? "", a.item.updatedAt ?? "")
+      || compareText(a.item.title, b.item.title));
 
   return options.limit ? results.slice(0, options.limit) : results;
 }
