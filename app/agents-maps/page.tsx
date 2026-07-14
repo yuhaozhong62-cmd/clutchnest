@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { AgentsMapExplorer } from "@/components/AgentsMapExplorer";
 
 export const metadata: Metadata = {
@@ -22,7 +23,7 @@ export default function AgentsMapsPage() {
         </p>
       </div>
       <div className="mt-10">
-        <AgentsMapExplorer />
+        <Suspense fallback={<div className="min-h-64 border border-white/10 p-6 text-sm text-zinc-600">正在载入英雄与地图…</div>}><AgentsMapExplorer /></Suspense>
       </div>
       <p className="mt-16 border-t border-white/10 pt-6 text-xs leading-6 text-zinc-600">
         地图名称与地图图像素材归 Riot Games 所有。ClutchNest 是独立的非商业玩家项目。

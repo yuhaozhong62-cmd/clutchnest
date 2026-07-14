@@ -14,6 +14,7 @@ export type ValorantAgent = {
   status: "published" | "draft";
   displayOrder: number;
   verifiedAt: string;
+  aliases?: string[];
 };
 
 export const agents: ValorantAgent[] = [
@@ -80,6 +81,7 @@ export const agents: ValorantAgent[] = [
   {
     id: "cypher",
     name: "Cypher",
+    aliases: ["保安", "赛博"],
     role: "sentinel",
     roleCn: "哨卫",
     roleEn: "Sentinel",

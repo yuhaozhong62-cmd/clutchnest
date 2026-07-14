@@ -12,12 +12,14 @@ export type ValorantMap = {
   displayOrder: number;
   sites: 2 | 3;
   status: "published" | "draft";
+  aliases?: string[];
 };
 
 export const maps: ValorantMap[] = [
   {
     id: "ascent",
     name: "Ascent",
+    aliases: ["空岛"],
     shortDescriptionCn: "双据点地图，以中路控制和可关闭的机械门为核心。",
     shortDescriptionEn: "A two-site map centered on mid control and closable mechanical doors.",
     coverImage: "/maps/2026-act-4/ascent/cover.webp",
@@ -139,4 +141,3 @@ export const currentMaps = maps
   .sort((a, b) => a.displayOrder - b.displayOrder);
 
 export const inactiveMaps = maps.filter((map) => !map.currentRotation);
-

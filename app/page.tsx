@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { ButtonLink } from "@/components/ButtonLink";
 import { CrosshairPreview } from "@/components/CrosshairPreview";
+import { HomepageDiscovery } from "@/components/home/HomepageDiscovery";
 import { publishedCrosshairs } from "@/lib/data/crosshairs";
 
 export default function HomePage() {
-  const featuredCrosshairs = publishedCrosshairs.filter((item) => item.featured).slice(0, 3);
+  const featuredCrosshairs = publishedCrosshairs.filter((item) => item.featured && item.contentType === "hao-tested").slice(0, 3);
 
   return (
     <div>
@@ -25,8 +26,8 @@ export default function HomePage() {
         <div className="mx-auto max-w-6xl px-5 py-16 sm:py-24">
           <div className="flex items-end justify-between gap-5">
             <div>
-              <h2 className="text-3xl font-semibold text-white">精选准星</h2>
-              <p className="mt-2 text-sm text-zinc-600">Featured crosshairs</p>
+              <h2 className="text-3xl font-semibold text-white">HAO 推荐准星</h2>
+              <p className="mt-2 text-sm text-zinc-600">HAO Featured Crosshairs</p>
             </div>
             <Link href="/crosshairs" className="text-sm font-semibold text-zinc-300 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40">
               查看全部 <span aria-hidden="true">→</span>
@@ -43,6 +44,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <HomepageDiscovery />
 
       <section className="border-t border-white/10 bg-white/[0.015]">
         <div className="mx-auto grid max-w-6xl gap-10 px-5 py-16 sm:py-24 lg:grid-cols-2 lg:gap-20">

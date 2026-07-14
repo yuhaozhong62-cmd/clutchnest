@@ -2,12 +2,42 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { GlobalSearchDialog } from "@/components/search/GlobalSearchDialog";
 import { site } from "@/lib/site";
 
 export function SiteHeader() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const lastFocusRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    function openFromShortcut(event: KeyboardEvent) {
+      const target = event.target;
+      const isTyping = target instanceof HTMLElement && target.matches("input, textarea, select, [contenteditable='true']");
+      if (isTyping) return;
+      if (event.key === "/" || ((event.ctrlKey || event.metaKey) && event.key.toLocaleLowerCase() === "k")) {
+        event.preventDefault();
+        lastFocusRef.current = document.activeElement as HTMLElement | null;
+        setSearchOpen(true);
+        setIsOpen(false);
+      }
+    }
+    window.addEventListener("keydown", openFromShortcut);
+    return () => window.removeEventListener("keydown", openFromShortcut);
+  }, []);
+
+  function openSearch(trigger: HTMLElement) {
+    lastFocusRef.current = trigger;
+    setSearchOpen(true);
+    setIsOpen(false);
+  }
+
+  function closeSearch() {
+    setSearchOpen(false);
+    window.requestAnimationFrame(() => lastFocusRef.current?.focus());
+  }
 
   return (
     <header
@@ -24,13 +54,18 @@ export function SiteHeader() {
           <span className="text-sm font-semibold tracking-[0.14em] text-white">CLUTCHNEST</span>
         </Link>
 
-        <nav className="hidden items-center gap-1 md:flex" aria-label="Main navigation">
-          {site.nav.map((item) => (
-            <NavLink key={item.href} item={item} active={item.href === "/" ? pathname === "/" : pathname.startsWith(item.href)} />
-          ))}
-        </nav>
+        <div className="flex items-center gap-2">
+          <nav className="hidden items-center gap-1 md:flex" aria-label="Main navigation">
+            {site.nav.map((item) => (
+              <NavLink key={item.href} item={item} active={item.href === "/" ? pathname === "/" : pathname.startsWith(item.href)} />
+            ))}
+          </nav>
 
-        <button
+          <button type="button" aria-label="打开全站搜索" onClick={(event) => openSearch(event.currentTarget)} className="inline-flex min-h-10 items-center justify-center rounded-md border border-white/10 px-3 text-sm text-zinc-400 transition hover:border-white/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50">
+            搜索
+          </button>
+
+          <button
           type="button"
           aria-label={isOpen ? "关闭导航菜单 / Close navigation menu" : "打开导航菜单 / Open navigation menu"}
           aria-expanded={isOpen}
@@ -43,7 +78,8 @@ export function SiteHeader() {
             <span className={`h-px bg-current transition duration-300 ${isOpen ? "opacity-0" : ""}`} />
             <span className={`h-px bg-current transition duration-300 ${isOpen ? "-translate-y-[7px] -rotate-45" : ""}`} />
           </span>
-        </button>
+          </button>
+        </div>
       </div>
 
       <div
@@ -71,6 +107,7 @@ export function SiteHeader() {
           ))}
         </nav>
       </div>
+      <GlobalSearchDialog open={searchOpen} onClose={closeSearch} />
     </header>
   );
 }

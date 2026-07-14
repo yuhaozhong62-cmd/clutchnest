@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import { agents, lineupPoints, maps, type LineupPoint, type ValorantMap } from "@/lib/data/agentsMaps";
 import type { ValorantAgent } from "@/lib/data/agents";
@@ -11,9 +12,16 @@ type MobileStep = "agent" | "map" | "point" | "strategy";
 type AgentFilter = "all" | "sentinel";
 
 export function AgentsMapExplorer() {
-  const [agentId, setAgentId] = useState(agents[0].id);
-  const [mapId, setMapId] = useState(maps[0].id);
-  const [selectedId, setSelectedId] = useState(lineupPoints[0].id);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const initialAgentId = agents.some((agent) => agent.id === searchParams.get("agent")) ? searchParams.get("agent")! : agents[0].id;
+  const initialMapId = maps.some((map) => map.id === searchParams.get("map")) ? searchParams.get("map")! : maps[0].id;
+  const initialPoint = lineupPoints.find((point) => point.id === searchParams.get("point") && point.agentId === initialAgentId && point.mapId === initialMapId)
+    ?? lineupPoints.find((point) => point.agentId === initialAgentId && point.mapId === initialMapId);
+  const [agentId, setAgentId] = useState(initialAgentId);
+  const [mapId, setMapId] = useState(initialMapId);
+  const [selectedId, setSelectedId] = useState(initialPoint?.id ?? "");
   const [mobileStep, setMobileStep] = useState<MobileStep>("agent");
   const [agentFilter, setAgentFilter] = useState<AgentFilter>("all");
 
@@ -31,10 +39,30 @@ export function AgentsMapExplorer() {
   const sentinelCount = agents.filter((agent) => agent.role === "sentinel").length;
   const tacticalGuideHref = agentId === "cypher" && mapId === "ascent" ? "/agents/cypher/ascent" : undefined;
 
+  useEffect(() => {
+    const nextAgentId = agents.some((agent) => agent.id === searchParams.get("agent")) ? searchParams.get("agent")! : agents[0].id;
+    const nextMapId = maps.some((map) => map.id === searchParams.get("map")) ? searchParams.get("map")! : maps[0].id;
+    const nextPoint = lineupPoints.find((point) => point.id === searchParams.get("point") && point.agentId === nextAgentId && point.mapId === nextMapId)
+      ?? lineupPoints.find((point) => point.agentId === nextAgentId && point.mapId === nextMapId);
+    setAgentId(nextAgentId);
+    setMapId(nextMapId);
+    setSelectedId(nextPoint?.id ?? "");
+  }, [searchParams]);
+
+  function updateUrl(updates: { agent?: string; map?: string; point?: string }) {
+    const params = new URLSearchParams(searchParams.toString());
+    for (const [key, value] of Object.entries(updates)) {
+      if (value) params.set(key, value);
+      else params.delete(key);
+    }
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+  }
+
   function selectAgent(nextId: string, advance = false) {
     setAgentId(nextId);
     const nextPoint = lineupPoints.find((point) => point.agentId === nextId && point.mapId === mapId);
     setSelectedId(nextPoint?.id ?? "");
+    updateUrl({ agent: nextId, map: mapId, point: nextPoint?.id });
     if (advance) setMobileStep("map");
   }
 
@@ -50,11 +78,13 @@ export function AgentsMapExplorer() {
     setMapId(nextId);
     const nextPoint = lineupPoints.find((point) => point.agentId === agentId && point.mapId === nextId);
     setSelectedId(nextPoint?.id ?? "");
+    updateUrl({ agent: agentId, map: nextId, point: nextPoint?.id });
     if (advance) setMobileStep("point");
   }
 
   function selectPoint(point: LineupPoint, advance = false) {
     setSelectedId(point.id);
+    updateUrl({ agent: agentId, map: mapId, point: point.id });
     if (advance) setMobileStep("strategy");
   }
 
