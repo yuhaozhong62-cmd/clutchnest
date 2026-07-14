@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { CrosshairLibrary } from "@/components/CrosshairLibrary";
 
 export const metadata: Metadata = {
-  title: "准星库 / Crosshair Library",
-  description: "浏览 HAO 实测准星与 ClutchNest 最近核验的职业选手准星参考。",
+  title: "EDG 现役选手准星代码",
+  description: "查看并复制 ZmjjKK、CHICHOO、nobody、Smoggy、Jieni7 等 EDG 现役选手近期可验证的 VALORANT 准星代码。",
   alternates: { canonical: "/crosshairs" },
   openGraph: { url: "/crosshairs" }
 };
@@ -21,7 +22,9 @@ export default function CrosshairsPage() {
           HAO-tested crosshairs and recently verified professional references with practical analysis.
         </p>
       </div>
-      <CrosshairLibrary />
+      <Suspense fallback={<div className="mt-10 min-h-64 border-y border-white/10 py-10 text-sm text-zinc-600">正在载入准星数据…</div>}>
+        <CrosshairLibrary />
+      </Suspense>
     </div>
   );
 }

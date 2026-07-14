@@ -3,13 +3,18 @@
 import { useState } from "react";
 
 type CopyButtonProps = {
-  value: string;
+  value?: string;
+  disabled?: boolean;
+  invalidReason?: string;
+  compact?: boolean;
 };
 
-export function CopyButton({ value }: CopyButtonProps) {
-  const [copied, setCopied] = useState(false);
+export function CopyButton({ value, disabled = false, invalidReason, compact = false }: CopyButtonProps) {
+  const [status, setStatus] = useState<"idle" | "copied" | "error">("idle");
+  const unavailable = disabled || !value;
 
   async function handleCopy() {
+    if (unavailable || !value) return;
     let didCopy = false;
 
     try {
@@ -33,26 +38,30 @@ export function CopyButton({ value }: CopyButtonProps) {
       document.body.removeChild(textarea);
     }
 
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 2000);
+    setStatus(didCopy ? "copied" : "error");
+    window.setTimeout(() => setStatus("idle"), didCopy ? 1800 : 2400);
   }
+
+  const label = unavailable
+    ? "准星待核实 / Code unavailable"
+    : status === "copied"
+      ? "已复制准星代码 / Crosshair code copied"
+      : status === "error"
+        ? "复制失败 / Copy failed"
+        : "复制准星代码 / Copy crosshair code";
 
   return (
     <button
       type="button"
       onClick={handleCopy}
-      aria-label={copied ? "已复制准星代码 / Crosshair code copied" : "复制准星代码 / Copy crosshair code"}
-      className="inline-flex min-w-28 items-center justify-center rounded-md border border-white/15 bg-white/[0.04] px-3 py-2 text-xs font-semibold text-white transition duration-300 hover:border-white/70 hover:bg-white hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+      disabled={unavailable}
+      aria-label={label}
+      title={unavailable ? invalidReason : undefined}
+      className={`inline-flex min-h-11 items-center justify-center rounded-md border px-3 py-2 text-xs font-semibold transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 ${compact ? "min-w-24" : "min-w-32"} ${unavailable ? "cursor-not-allowed border-white/10 bg-white/[0.02] text-zinc-600" : status === "error" ? "border-red-500/50 bg-red-500/10 text-red-200" : "border-white/15 bg-white/[0.04] text-white hover:border-white/70 hover:bg-white hover:text-black active:scale-[0.98]"}`}
     >
-      <span aria-live="polite">{copied ? (
-        <span>
-          已复制 ✓ <span className="text-zinc-400">Copied ✓</span>
-        </span>
-      ) : (
-        <span>
-          复制代码 <span className="text-zinc-400">Copy Code</span>
-        </span>
-      )}</span>
+      <span aria-live="polite">
+        {unavailable ? "准星待核实" : status === "copied" ? "已复制 ✓" : status === "error" ? "复制失败，请重试" : "复制准星代码"}
+      </span>
     </button>
   );
 }
