@@ -5,14 +5,17 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { CrosshairCard } from "@/components/CrosshairCard";
 import { TeamCrosshairSection } from "@/components/crosshairs/TeamCrosshairSection";
 import { crosshairFilters, publishedCrosshairs, type CrosshairFilterId } from "@/lib/data/crosshairs";
+import { edgTeamDefinition } from "@/lib/data/crosshairTeams/edg";
+import { xlgTeamDefinition } from "@/lib/data/crosshairTeams/xlg";
 
 const primaryFilterIds: CrosshairFilterId[] = ["all", "hao-tested", "pro-reference", "dot", "cross"];
 const secondaryFilterIds: CrosshairFilterId[] = ["minimal", "headshot", "high-visibility"];
 const validFilterIds = new Set<CrosshairFilterId>([...primaryFilterIds, ...secondaryFilterIds]);
 const teamOptions = [
-  { id: "all", label: "全部内容" },
+  { id: "all", label: "全部" },
+  { id: "hao", label: "HAO 实测" },
   { id: "edg", label: "EDG" },
-  { id: "hao", label: "HAO 自用" },
+  { id: "xlg", label: "XLG" },
   { id: "pro", label: "其他职业选手" }
 ] as const;
 
@@ -34,7 +37,7 @@ export function CrosshairLibrary() {
     const params = new URLSearchParams(searchParams.toString());
     if (!value || value === "all") params.delete(key);
     else params.set(key, value);
-    if (key === "team" && value !== "edg") {
+    if (key === "team") {
       params.delete("player");
       params.delete("crosshair");
       params.delete("type");
@@ -61,7 +64,8 @@ export function CrosshairLibrary() {
 
   const filters = new Map(crosshairFilters.map((filter) => [filter.id, filter]));
   const showEdg = team === "all" || team === "edg";
-  const showExisting = team !== "edg";
+  const showXlg = team === "all" || team === "xlg";
+  const showExisting = team !== "edg" && team !== "xlg";
 
   return (
     <div className="mt-10">
@@ -69,7 +73,7 @@ export function CrosshairLibrary() {
         <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,0.7fr)] lg:items-end">
           <div>
             <p className="mb-3 text-xs text-zinc-600">内容来源</p>
-            <div className="flex flex-wrap gap-2" aria-label="准星队伍筛选">
+            <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1" aria-label="准星队伍筛选">
               {teamOptions.map((option) => (
                 <button
                   key={option.id}
@@ -77,7 +81,7 @@ export function CrosshairLibrary() {
                   aria-label={`筛选内容：${option.label}`}
                   aria-pressed={team === option.id}
                   onClick={() => updateQuery("team", option.id)}
-                  className={`min-h-10 rounded-md border px-3 text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 ${team === option.id ? "border-white bg-white text-black" : "border-white/10 text-zinc-400 hover:border-white/30 hover:text-white"}`}
+                  className={`min-h-10 shrink-0 rounded-md border px-3 text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 ${team === option.id ? "border-white bg-white text-black" : "border-white/10 text-zinc-400 hover:border-white/30 hover:text-white"}`}
                 >
                   {option.label}
                 </button>
@@ -97,7 +101,8 @@ export function CrosshairLibrary() {
         </div>
       </section>
 
-      {showEdg ? <TeamCrosshairSection searchQuery={query} /> : null}
+      {showEdg ? <TeamCrosshairSection team={edgTeamDefinition} searchQuery={query} /> : null}
+      {showXlg ? <TeamCrosshairSection team={xlgTeamDefinition} searchQuery={query} /> : null}
 
       {showExisting ? (
         <section className="mt-14 border-t border-white/10 pt-10">

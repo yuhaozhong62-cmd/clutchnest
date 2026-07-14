@@ -1,9 +1,12 @@
-import { validateValorantCrosshairCode } from "@/lib/crosshairCode";
 import type {
   CrosshairSource,
+  CrosshairTeamDefinition,
   NormalizedCrosshairSettings,
   ProPlayerCrosshairProfile
 } from "@/lib/data/crosshairTeams/types";
+import { warnInvalidCrosshairCodes } from "@/lib/data/crosshairTeams/utils";
+
+export { getCrosshairVersion } from "@/lib/data/crosshairTeams/utils";
 
 export const edgRosterVerifiedAt = "2026-07-14";
 
@@ -379,25 +382,20 @@ export function getEdgProfile(playerId: string) {
   return profiles.find((profile) => profile.playerId === playerId);
 }
 
-export function getCrosshairVersion(profile: ProPlayerCrosshairProfile, versionId?: string) {
-  if (versionId) {
-    const selected = profile.crosshairs.find(
-      (version) => version.id === versionId || version.slug === versionId || version.versionStatus === versionId
-    );
-    if (selected) return selected;
-  }
+export const edgTeamDefinition: CrosshairTeamDefinition = {
+  id: "edg",
+  shortName: "EDG",
+  fullName: "EDward Gaming",
+  titleZh: "EDG 现役全员准星",
+  titleEn: "EDward Gaming Current Roster Crosshairs",
+  descriptionZh: "查看、比较并复制 EDG 现役选手近期可验证的 VALORANT 准星。",
+  contextZh: "职业选手可能随时更换准星，本站记录的是最近能够合理核实的版本。",
+  rosterVerifiedAt: edgRosterVerifiedAt,
+  rosterNoteZh: "CB 已于 2026-07-02 离队，不计入现役统计。",
+  searchAliases: ["EDG", "EDward Gaming"],
+  disclaimerZh: "准星只影响视觉习惯，不会直接提高枪法。职业选手可能随时更改设置，实际设置请以选手最新公开内容为准。",
+  disclaimerEn: "Pro players may change their settings at any time. ClutchNest records the latest version we can reasonably verify.",
+  profiles
+};
 
-  return profile.crosshairs.find((version) => version.versionStatus === "primary") ?? profile.crosshairs[0];
-}
-
-if (process.env.NODE_ENV !== "production") {
-  for (const profile of profiles) {
-    for (const version of profile.crosshairs) {
-      if (!version.code) continue;
-      const validation = validateValorantCrosshairCode(version.code);
-      if (!validation.valid) {
-        console.warn(`[crosshair] ${profile.playerId}/${version.id}: ${validation.reasons.join("；")}`);
-      }
-    }
-  }
-}
+warnInvalidCrosshairCodes(profiles);

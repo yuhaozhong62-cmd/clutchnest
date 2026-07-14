@@ -4,6 +4,8 @@ export type CrosshairVersionStatus = "primary" | "alternative" | "previous" | "v
 
 export type RosterStatus = "starter" | "rotation" | "substitute" | "active" | "inactive";
 
+export type CrosshairTeamId = "edg" | "xlg";
+
 export type CrosshairSource = {
   title: string;
   url: string;
@@ -64,6 +66,8 @@ export type CrosshairVersion = {
   sources: CrosshairSource[];
   haoTestStatus: "untested" | "testing" | "tested";
   haoReview?: string;
+  contentType?: "pro-reference";
+  createdBy?: "ClutchNest Research";
 };
 
 export type ProPlayerCrosshairProfile = {
@@ -71,12 +75,29 @@ export type ProPlayerCrosshairProfile = {
   displayName: string;
   nameZh?: string;
   realNameZh: string;
-  teamId: "edg";
+  teamId: CrosshairTeamId;
   isCurrentRoster: boolean;
   rosterStatus: RosterStatus;
   rosterVerifiedAt: string;
   rosterSources: CrosshairSource[];
   role?: string;
   initials: string;
+  searchAliases?: string[];
   crosshairs: CrosshairVersion[];
+};
+
+export type CrosshairTeamDefinition = {
+  id: CrosshairTeamId;
+  shortName: string;
+  fullName: string;
+  titleZh: string;
+  titleEn: string;
+  descriptionZh: string;
+  contextZh: string;
+  rosterVerifiedAt: string;
+  rosterNoteZh: string;
+  searchAliases: string[];
+  disclaimerZh: string;
+  disclaimerEn: string;
+  profiles: ProPlayerCrosshairProfile[];
 };

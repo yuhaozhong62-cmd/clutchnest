@@ -32,13 +32,14 @@ export function ProCrosshairCard({
             </div>
           </div>
           <span className={`shrink-0 text-[11px] font-semibold ${profile.isCurrentRoster ? "text-valorant" : "text-zinc-500"}`}>
-            {profile.isCurrentRoster ? "EDG 现役" : "已离队"}
+            {profile.isCurrentRoster ? `${profile.teamId.toUpperCase()} 现役` : "已离队"}
           </span>
         </div>
 
         <div className="mt-4 flex flex-wrap gap-2">
           <VersionBadge status={version.versionStatus} />
           <VerificationBadge status={version.verificationStatus} />
+          <span className="rounded-full border border-white/10 px-2.5 py-1 text-[11px] text-zinc-500">职业选手参考</span>
         </div>
 
         <h3 className="mt-4 text-xl font-semibold text-white">{version.titleZh}</h3>
@@ -46,7 +47,7 @@ export function ProCrosshairCard({
         <p className="mt-4 text-sm leading-6 text-zinc-400">{version.summaryZh}</p>
 
         <div className="mt-4 flex flex-wrap gap-2">
-          {version.styleTags.slice(0, 4).map((tag) => (
+          {version.styleTags.slice(0, 2).map((tag) => (
             <span key={tag} className="rounded-full border border-white/10 px-2.5 py-1 text-[11px] text-zinc-500">{tag}</span>
           ))}
         </div>
@@ -77,7 +78,7 @@ export function ProCrosshairCard({
 
         <div className="mt-5 border-t border-white/10 pt-4 text-xs leading-5 text-zinc-600">
           <p>来源：{version.sources.map((source) => source.sourceType === "database" ? "专业数据库" : source.sourceType === "stream" ? "公开直播" : "赛事资料").join(" / ") || "待补充"}</p>
-          <p className="mt-1">HAO 尚未完成实战测试，当前描述基于参数和视觉特征。</p>
+          <p className="mt-1">{version.createdBy ?? "ClutchNest Research"} · HAO 尚未完成实战测试。</p>
         </div>
       </div>
     </article>

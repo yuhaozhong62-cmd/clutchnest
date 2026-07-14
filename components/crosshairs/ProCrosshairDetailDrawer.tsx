@@ -69,7 +69,7 @@ export function ProCrosshairDetailDrawer({
       >
         <header className="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-white/10 bg-[#09090a]/95 px-5 py-4 backdrop-blur-xl sm:px-7">
           <div className="min-w-0">
-            <p className="text-xs font-semibold text-valorant">{profile.isCurrentRoster ? "EDG 现役选手" : "EDG 历史资料"}</p>
+            <p className="text-xs font-semibold text-valorant">{profile.isCurrentRoster ? `${profile.teamId.toUpperCase()} 现役选手` : `${profile.teamId.toUpperCase()} 历史资料`}</p>
             <h2 id="pro-crosshair-detail-title" className="truncate text-lg font-semibold text-white">{profile.displayName} · {version.titleZh}</h2>
           </div>
           <button
@@ -134,6 +134,7 @@ export function ProCrosshairDetailDrawer({
             <section>
               <h3 className="text-sm font-semibold text-white">HAO 测试</h3>
               <p className="mt-3 text-sm leading-6 text-zinc-400">尚未测试。当前描述基于准星参数和视觉特征，不代表实战结论。</p>
+              <p className="mt-2 text-xs leading-5 text-zinc-600">职业选手设置仅供参考；使用相同准星不会获得相同竞技表现。</p>
             </section>
           </div>
 

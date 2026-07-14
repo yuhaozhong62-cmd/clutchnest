@@ -1,13 +1,35 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { CrosshairLibrary } from "@/components/CrosshairLibrary";
+import { edgCurrentRosterProfiles } from "@/lib/data/crosshairTeams/edg";
+import { xlgCurrentRosterProfiles } from "@/lib/data/crosshairTeams/xlg";
 
-export const metadata: Metadata = {
-  title: "EDG 现役选手准星代码",
-  description: "查看并复制 ZmjjKK、CHICHOO、nobody、Smoggy、Jieni7 等 EDG 现役选手近期可验证的 VALORANT 准星代码。",
-  alternates: { canonical: "/crosshairs" },
-  openGraph: { url: "/crosshairs" }
+type CrosshairsPageProps = {
+  searchParams: Promise<{ team?: string | string[] }>;
 };
+
+export async function generateMetadata({ searchParams }: CrosshairsPageProps): Promise<Metadata> {
+  const params = await searchParams;
+  const team = Array.isArray(params.team) ? params.team[0] : params.team;
+  const roster = team === "xlg" ? xlgCurrentRosterProfiles : team === "edg" ? edgCurrentRosterProfiles : undefined;
+  const teamName = team === "xlg" ? "XLG" : team === "edg" ? "EDG" : undefined;
+  const title = teamName ? `${teamName} 现役选手准星代码` : "Valorant 准星库";
+  const playerNames = roster?.map((profile) => profile.displayName).join("、");
+  const description = teamName && playerNames
+    ? `查看 ${playerNames} 等 ${teamName} 现役选手近期可验证的 VALORANT 准星代码、参数与原创预览。`
+    : "浏览 HAO 实测准星与近期核验的职业选手 VALORANT 准星代码、参数和原创预览。";
+
+  return {
+    title,
+    description,
+    alternates: { canonical: "/crosshairs" },
+    openGraph: {
+      title: `${title}｜ClutchNest`,
+      description,
+      url: "/crosshairs"
+    }
+  };
+}
 
 export default function CrosshairsPage() {
   return (
