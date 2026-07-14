@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { CrosshairLibrary } from "@/components/CrosshairLibrary";
 import { edgCurrentRosterProfiles } from "@/lib/data/crosshairTeams/edg";
 import { xlgCurrentRosterProfiles } from "@/lib/data/crosshairTeams/xlg";
+import { prxCurrentRosterProfiles } from "@/lib/data/crosshairTeams/prx";
 
 type CrosshairsPageProps = {
   searchParams: Promise<{ team?: string | string[] }>;
@@ -11,8 +12,14 @@ type CrosshairsPageProps = {
 export async function generateMetadata({ searchParams }: CrosshairsPageProps): Promise<Metadata> {
   const params = await searchParams;
   const team = Array.isArray(params.team) ? params.team[0] : params.team;
-  const roster = team === "xlg" ? xlgCurrentRosterProfiles : team === "edg" ? edgCurrentRosterProfiles : undefined;
-  const teamName = team === "xlg" ? "XLG" : team === "edg" ? "EDG" : undefined;
+  const roster = team === "prx"
+    ? prxCurrentRosterProfiles
+    : team === "xlg"
+      ? xlgCurrentRosterProfiles
+      : team === "edg"
+        ? edgCurrentRosterProfiles
+        : undefined;
+  const teamName = team === "prx" ? "PRX" : team === "xlg" ? "XLG" : team === "edg" ? "EDG" : undefined;
   const title = teamName ? `${teamName} 现役选手准星代码` : "Valorant 准星库";
   const playerNames = roster?.map((profile) => profile.displayName).join("、");
   const description = teamName && playerNames

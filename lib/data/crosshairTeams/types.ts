@@ -4,7 +4,7 @@ export type CrosshairVersionStatus = "primary" | "alternative" | "previous" | "v
 
 export type RosterStatus = "starter" | "rotation" | "substitute" | "active" | "inactive";
 
-export type CrosshairTeamId = "edg" | "xlg";
+export type CrosshairTeamId = "edg" | "xlg" | "prx";
 
 export type CrosshairSource = {
   title: string;
@@ -99,5 +99,6 @@ export type CrosshairTeamDefinition = {
   searchAliases: string[];
   disclaimerZh: string;
   disclaimerEn: string;
+  defaultSortMode?: "verification" | "roster";
   profiles: ProPlayerCrosshairProfile[];
 };

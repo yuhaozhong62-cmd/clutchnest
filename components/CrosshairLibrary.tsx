@@ -7,6 +7,7 @@ import { TeamCrosshairSection } from "@/components/crosshairs/TeamCrosshairSecti
 import { crosshairFilters, publishedCrosshairs, type CrosshairFilterId } from "@/lib/data/crosshairs";
 import { edgTeamDefinition } from "@/lib/data/crosshairTeams/edg";
 import { xlgTeamDefinition } from "@/lib/data/crosshairTeams/xlg";
+import { prxTeamDefinition } from "@/lib/data/crosshairTeams/prx";
 
 const primaryFilterIds: CrosshairFilterId[] = ["all", "hao-tested", "pro-reference", "dot", "cross"];
 const secondaryFilterIds: CrosshairFilterId[] = ["minimal", "headshot", "high-visibility"];
@@ -16,6 +17,7 @@ const teamOptions = [
   { id: "hao", label: "HAO 实测" },
   { id: "edg", label: "EDG" },
   { id: "xlg", label: "XLG" },
+  { id: "prx", label: "PRX" },
   { id: "pro", label: "其他职业选手" }
 ] as const;
 
@@ -65,7 +67,8 @@ export function CrosshairLibrary() {
   const filters = new Map(crosshairFilters.map((filter) => [filter.id, filter]));
   const showEdg = team === "all" || team === "edg";
   const showXlg = team === "all" || team === "xlg";
-  const showExisting = team !== "edg" && team !== "xlg";
+  const showPrx = team === "all" || team === "prx";
+  const showExisting = team !== "edg" && team !== "xlg" && team !== "prx";
 
   return (
     <div className="mt-10">
@@ -103,6 +106,7 @@ export function CrosshairLibrary() {
 
       {showEdg ? <TeamCrosshairSection team={edgTeamDefinition} searchQuery={query} /> : null}
       {showXlg ? <TeamCrosshairSection team={xlgTeamDefinition} searchQuery={query} /> : null}
+      {showPrx ? <TeamCrosshairSection team={prxTeamDefinition} searchQuery={query} /> : null}
 
       {showExisting ? (
         <section className="mt-14 border-t border-white/10 pt-10">

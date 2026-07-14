@@ -90,6 +90,7 @@ export function TeamCrosshairSection({
       if (sort === "recent") return (b.version.lastVerifiedAt ?? "").localeCompare(a.version.lastVerifiedAt ?? "");
       if (sort === "player") return a.profile.displayName.localeCompare(b.profile.displayName);
       if (sort === "type") return (a.version.styleTags[0] ?? "").localeCompare(b.version.styleTags[0] ?? "");
+      if (team.defaultSortMode === "roster") return team.profiles.indexOf(a.profile) - team.profiles.indexOf(b.profile);
       const rankDifference = getVersionRank(a.version) - getVersionRank(b.version);
       if (rankDifference) return rankDifference;
       return team.profiles.indexOf(a.profile) - team.profiles.indexOf(b.profile);
@@ -127,11 +128,12 @@ export function TeamCrosshairSection({
           <p className="mt-4 text-base leading-7 text-zinc-300">{team.descriptionZh}</p>
           <p className="mt-2 text-sm leading-6 text-zinc-500">{team.contextZh}</p>
         </div>
-        <dl className="grid grid-cols-2 border border-white/10 bg-panel/60 sm:grid-cols-4 xl:min-w-[32rem]">
+        <dl className="grid grid-cols-2 border border-white/10 bg-panel/60 sm:grid-cols-5 xl:min-w-[38rem]">
           <RosterStat label="现役选手" value={String(currentProfiles.length)} />
           <RosterStat label="已验证" value={String(counts.verified)} />
           <RosterStat label="较可信" value={String(counts.likely)} />
           <RosterStat label="待核实" value={String(counts.pending)} />
+          <RosterStat label="历史版本" value={String(counts.history)} />
         </dl>
       </div>
 
@@ -235,8 +237,9 @@ function getStatusCounts(profiles: ProPlayerCrosshairProfile[]) {
     if (status === "verified") counts.verified += 1;
     else if (status === "likely") counts.likely += 1;
     else counts.pending += 1;
+    counts.history += profile.crosshairs.filter((version) => version.versionStatus === "previous").length;
     return counts;
-  }, { verified: 0, likely: 0, pending: 0 });
+  }, { verified: 0, likely: 0, pending: 0, history: 0 });
 }
 
 function RosterStat({ label, value }: { label: string; value: string }) {
