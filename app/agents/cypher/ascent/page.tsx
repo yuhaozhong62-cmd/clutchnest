@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 export default function CypherAscentPage() {
   return (
-    <Suspense fallback={<div className="mx-auto min-h-[70vh] max-w-6xl px-5 py-20 text-sm text-zinc-600">正在加载战术地图…</div>}>
+    <Suspense fallback={<div className="site-container min-h-[70vh] py-20 text-sm text-zinc-500">正在加载战术地图…</div>}>
       <CypherAscentExperience />
     </Suspense>
   );

@@ -116,30 +116,26 @@ export function TeamCrosshairSection({
   }
 
   return (
-    <section id={`${team.id}-crosshairs`} className="mt-12 scroll-mt-24 border-t border-white/10 pt-10">
-      <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_auto] xl:items-end">
-        <div className="max-w-3xl">
+    <section id={`${team.id}-crosshairs`} className="mt-16 scroll-mt-24 border-t border-white/[0.08] pt-12">
+      <div className="max-w-3xl">
           <div className="flex items-center gap-3">
             <span className="grid h-10 w-10 place-items-center border border-white/20 bg-white text-xs font-black text-black">{team.shortName}</span>
             <span className="rounded-full border border-valorant/30 px-3 py-1 text-xs font-semibold text-valorant">现役阵容</span>
           </div>
-          <h2 className="mt-5 text-3xl font-black text-white sm:text-4xl">{team.titleZh}</h2>
-          <p className="mt-2 text-sm text-zinc-600">{team.titleEn}</p>
+          <h2 className="mt-5 text-3xl font-semibold text-white sm:text-4xl">{team.titleZh}</h2>
+          <p className="mt-2 text-sm text-zinc-500">{team.titleEn}</p>
           <p className="mt-4 text-base leading-7 text-zinc-300">{team.descriptionZh}</p>
           <p className="mt-2 text-sm leading-6 text-zinc-500">{team.contextZh}</p>
-        </div>
-        <dl className="grid grid-cols-2 border border-white/10 bg-panel/60 sm:grid-cols-5 xl:min-w-[38rem]">
-          <RosterStat label="现役选手" value={String(currentProfiles.length)} />
-          <RosterStat label="已验证" value={String(counts.verified)} />
-          <RosterStat label="较可信" value={String(counts.likely)} />
-          <RosterStat label="待核实" value={String(counts.pending)} />
-          <RosterStat label="历史版本" value={String(counts.history)} />
-        </dl>
       </div>
+      <p className="mt-6 flex flex-wrap gap-x-3 gap-y-1 border-y border-white/[0.08] py-4 text-sm text-zinc-400">
+        <span>{currentProfiles.length} 位现役选手</span><span aria-hidden="true" className="text-zinc-700">·</span>
+        <span>{counts.verified} 条已验证</span><span aria-hidden="true" className="text-zinc-700">·</span>
+        <span>{counts.likely} 条较可信</span><span aria-hidden="true" className="text-zinc-700">·</span>
+        <span>核验于 {team.rosterVerifiedAt}</span>
+      </p>
+      <p className="mt-3 text-xs leading-6 text-zinc-500">{team.rosterNoteZh}{counts.pending ? ` · ${counts.pending} 条待核实` : ""}{counts.history ? ` · ${counts.history} 条历史版本` : ""}</p>
 
-      <p className="mt-5 text-xs leading-6 text-zinc-600">名单最后核实：{team.rosterVerifiedAt} · {team.rosterNoteZh}</p>
-
-      <div className="mt-8 overflow-x-auto border-y border-white/10 py-4" aria-label={`${team.shortName} 选手筛选`}>
+      <div className="mt-8 overflow-x-auto border-y border-white/[0.08] py-4" aria-label={`${team.shortName} 选手筛选`}>
         <div className="flex min-w-max gap-2">
           <PlayerTab label="全部" subLabel={`${currentProfiles.length} 人`} active={selectedPlayer === "all"} onClick={() => updateQuery({ player: undefined, crosshair: undefined })} />
           {currentProfiles.map((profile) => (
@@ -242,15 +238,11 @@ function getStatusCounts(profiles: ProPlayerCrosshairProfile[]) {
   }, { verified: 0, likely: 0, pending: 0, history: 0 });
 }
 
-function RosterStat({ label, value }: { label: string; value: string }) {
-  return <div className="border-b border-r border-white/10 p-4 last:border-r-0 sm:border-b-0"><dt className="text-[11px] text-zinc-600">{label}</dt><dd className="mt-2 text-2xl font-black text-white">{value}</dd></div>;
-}
-
 function PlayerTab({ label, subLabel, active, muted = false, onClick }: { label: string; subLabel: string; active: boolean; muted?: boolean; onClick: () => void }) {
   return (
-    <button type="button" aria-label={`${label}，${subLabel}`} onClick={onClick} aria-pressed={active} className={`min-h-14 rounded-md border px-4 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 ${active ? "border-white bg-white text-black" : "border-white/10 bg-transparent hover:border-white/30"}`}>
-      <span className={`block text-sm font-semibold ${active ? "text-black" : muted ? "text-zinc-500" : "text-white"}`}>{label}</span>
-      <span className={`mt-0.5 block text-[11px] ${active ? "text-black/60" : "text-zinc-600"}`}>{subLabel}</span>
+    <button type="button" aria-label={`${label}，${subLabel}`} onClick={onClick} aria-pressed={active} className="filter-pill min-h-14 px-4 text-left focus-visible:outline-none">
+      <span className={`block text-sm font-semibold ${muted && !active ? "text-zinc-500" : "text-white"}`}>{label}</span>
+      <span className="mt-0.5 block text-[11px] text-zinc-500">{subLabel}</span>
     </button>
   );
 }

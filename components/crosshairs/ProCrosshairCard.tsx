@@ -17,7 +17,7 @@ export function ProCrosshairCard({
   const copyAvailable = validation.valid && version.verificationStatus !== "verificationPending";
 
   return (
-    <article className="flex min-w-0 flex-col overflow-hidden rounded-lg border border-white/10 bg-panel/80 transition duration-200 hover:border-white/25">
+    <article className="surface-card flex min-w-0 flex-col overflow-hidden">
       <ProCrosshairPreview settings={version.normalizedSettings} label={`${profile.displayName} ${version.titleZh}`} />
 
       <div className="flex flex-1 flex-col p-4 sm:p-5">
@@ -37,28 +37,28 @@ export function ProCrosshairCard({
         </div>
 
         <div className="mt-4 flex flex-wrap gap-2">
-          <VersionBadge status={version.versionStatus} />
           <VerificationBadge status={version.verificationStatus} />
-          <span className="rounded-full border border-white/10 px-2.5 py-1 text-[11px] text-zinc-500">职业选手参考</span>
+          <span className="rounded-full border border-white/10 px-2.5 py-1 text-[11px] text-zinc-500">职业选手</span>
+          {version.versionStatus !== "primary" ? <VersionBadge status={version.versionStatus} /> : null}
         </div>
 
         <h3 className="mt-4 text-xl font-semibold text-white">{version.titleZh}</h3>
-        <p className="mt-1 text-xs text-zinc-600">{version.titleEn}</p>
+        <p className="mt-1 text-xs text-zinc-500">{version.titleEn}</p>
         <p className="mt-4 text-sm leading-6 text-zinc-400">{version.summaryZh}</p>
 
         <div className="mt-4 flex flex-wrap gap-2">
-          {version.styleTags.slice(0, 2).map((tag) => (
+          {version.styleTags.slice(0, 1).map((tag) => (
             <span key={tag} className="rounded-full border border-white/10 px-2.5 py-1 text-[11px] text-zinc-500">{tag}</span>
           ))}
         </div>
 
-        <div className="mt-5 min-w-0 rounded-md border border-white/10 bg-black/45 p-3">
-          <div className="flex items-center justify-between gap-3 text-xs text-zinc-600">
+        <div className="mt-5 min-w-0 rounded-md border border-white/[0.08] bg-black/25 p-3">
+          <div className="flex items-center justify-between gap-3 text-xs text-zinc-500">
             <span>完整导入代码</span>
             <span>{version.lastVerifiedAt ? `核实 ${version.lastVerifiedAt}` : "日期待核实"}</span>
           </div>
           {version.code ? (
-            <code className="mt-2 block max-w-full overflow-hidden text-ellipsis whitespace-nowrap text-xs text-zinc-300">{version.code}</code>
+            <code className="mt-2 block max-w-full overflow-hidden text-ellipsis whitespace-nowrap font-mono text-xs text-zinc-300">{version.code}</code>
           ) : (
             <p className="mt-2 text-sm text-amber-200">暂未找到足够可靠的近期完整代码</p>
           )}
@@ -69,14 +69,14 @@ export function ProCrosshairCard({
               onClick={onDetails}
               aria-label={`查看 ${profile.displayName} 准星详细参数`}
               data-crosshair-detail-trigger={`${profile.playerId}-${version.id}`}
-              className="inline-flex min-h-11 flex-1 items-center justify-center rounded-md border border-white/15 px-3 py-2 text-xs font-semibold text-white transition hover:border-white/45 hover:bg-white/[0.06] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+              className="btn-secondary min-h-11 flex-1 px-3 text-xs"
             >
               查看详细参数
             </button>
           </div>
         </div>
 
-        <div className="mt-5 border-t border-white/10 pt-4 text-xs leading-5 text-zinc-600">
+        <div className="mt-5 border-t border-white/[0.08] pt-4 text-xs leading-5 text-zinc-500">
           <p>来源：{version.sources.map((source) => source.sourceType === "database" ? "专业数据库" : source.sourceType === "stream" ? "公开直播" : "赛事资料").join(" / ") || "待补充"}</p>
           <p className="mt-1">{version.createdBy ?? "ClutchNest Research"} · HAO 尚未完成实战测试。</p>
         </div>

@@ -7,10 +7,10 @@ export function CrosshairDetail({ crosshair }: { crosshair: Crosshair }) {
 
   return (
     <article className="mt-8 max-w-5xl">
-      <header className="border-b border-white/10 pb-8">
+      <header className="border-b border-white/[0.08] pb-8">
         <p className="text-sm font-medium text-valorant">{isProReference ? "职业选手参考" : "HAO 实测"}</p>
-        <h1 className="mt-3 text-4xl font-black text-white sm:text-5xl">{crosshair.nameCn}</h1>
-        <p className="mt-2 text-sm text-zinc-600">{crosshair.nameEn}</p>
+        <h1 className="mt-3 page-title">{crosshair.nameCn}</h1>
+        <p className="mt-2 page-kicker">{crosshair.nameEn}</p>
         <div className="mt-5 flex flex-wrap gap-2">
           {crosshair.tags.filter((tag) => !["hao-tested", "pro-reference"].includes(tag)).map((tag) => (
             <span key={tag} className="rounded-full border border-white/10 px-3 py-1 text-xs text-zinc-500">
@@ -22,15 +22,15 @@ export function CrosshairDetail({ crosshair }: { crosshair: Crosshair }) {
 
       <div className="mt-8"><CrosshairPreview image={crosshair.image} name={crosshair.nameCn} accent={crosshair.accent} /></div>
 
-      <section className="mt-6 rounded-lg border border-white/10 bg-panel/70 p-4 sm:p-5">
+      <section className="surface-panel mt-6 p-4 sm:p-5">
         <h2 className="text-base font-semibold text-white">准星代码</h2>
         <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center">
-          <code className="min-w-0 flex-1 overflow-x-auto text-xs leading-6 text-zinc-300">{crosshair.code}</code>
+          <code className="min-w-0 flex-1 overflow-x-auto font-mono text-xs leading-6 text-zinc-300">{crosshair.code}</code>
           <CopyButton value={crosshair.code} />
         </div>
       </section>
 
-      <div className="reading-content mt-14 space-y-14">
+      <div className="reading-content mt-14 space-y-16">
         <section>
           <h2 className="text-2xl font-semibold text-white">适合谁使用</h2>
           <p className="mt-4 text-base leading-8 text-zinc-300">{crosshair.recommendedForCn}</p>

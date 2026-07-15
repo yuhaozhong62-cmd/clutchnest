@@ -28,7 +28,7 @@ export function SearchResultCard({
       aria-selected={compact ? selected : undefined}
       data-search-result-type={item.type}
       data-search-result-id={item.id}
-      className={`group grid min-w-0 gap-3 rounded-md border p-3 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 ${compact ? "grid-cols-[3rem_minmax(0,1fr)_auto] items-center" : "grid-cols-[4.5rem_minmax(0,1fr)] sm:grid-cols-[5.5rem_minmax(0,1fr)_auto] sm:items-center sm:p-4"} ${selected ? "border-white/40 bg-white/[0.09]" : "border-white/10 bg-panel/60 hover:border-white/30 hover:bg-white/[0.04]"}`}
+      className={`group grid min-w-0 gap-3 rounded-[10px] border p-3 transition focus-visible:outline-none ${compact ? "grid-cols-[3rem_minmax(0,1fr)_auto] items-center" : "grid-cols-[4.5rem_minmax(0,1fr)] sm:grid-cols-[5.5rem_minmax(0,1fr)_auto] sm:items-center sm:p-4"} ${selected ? "border-valorant/45 bg-valorant/[0.07]" : "border-white/10 bg-panel/70 hover:border-white/25 hover:bg-white/[0.035]"}`}
     >
       <ResultVisual item={item} compact={compact} />
       <div className="min-w-0">
@@ -36,9 +36,9 @@ export function SearchResultCard({
           <span className="shrink-0 rounded-full border border-white/10 px-2 py-0.5 text-[10px] text-zinc-500">{searchTypeLabels[item.type]}</span>
           <h3 className={`${compact ? "truncate text-sm" : "text-base"} min-w-0 font-semibold text-white`}><SearchHighlight text={item.title} query={query} /></h3>
         </div>
-        {item.subtitle ? <p className="mt-1 truncate text-xs text-zinc-600"><SearchHighlight text={item.subtitle} query={query} /></p> : null}
+        {item.subtitle ? <p className="mt-1 truncate text-xs text-zinc-500"><SearchHighlight text={item.subtitle} query={query} /></p> : null}
         <p className={`${compact ? "line-clamp-1" : "line-clamp-2"} mt-2 text-xs leading-5 text-zinc-400`}><SearchHighlight text={item.description} query={query} /></p>
-        {!compact ? <p className="mt-2 text-[11px] text-zinc-600">{getMetaText(item)}</p> : null}
+        {!compact ? <p className="mt-2 text-[11px] text-zinc-500">{getMetaText(item)}</p> : null}
       </div>
       <span className={`${compact ? "block" : "hidden sm:block"} text-sm text-zinc-600 transition group-hover:translate-x-0.5 group-hover:text-white`} aria-hidden="true">→</span>
     </Link>

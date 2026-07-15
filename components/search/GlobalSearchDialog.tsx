@@ -80,13 +80,13 @@ export function GlobalSearchDialog({ open, onClose }: { open: boolean; onClose: 
   const fullSearchHref = normalizedQuery ? `/search?q=${encodeURIComponent(query.trim())}` : "/search";
 
   return createPortal(
-    <div className="fixed inset-0 z-[70] bg-black/80 sm:p-5" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && onClose()}>
-      <div ref={panelRef} role="dialog" aria-modal="true" aria-labelledby="global-search-title" onKeyDown={handlePanelKeyDown} className="flex h-[100dvh] w-full flex-col overflow-hidden bg-[#080809] sm:mx-auto sm:mt-[5vh] sm:h-[min(48rem,88vh)] sm:max-w-3xl sm:rounded-lg sm:border sm:border-white/15 sm:shadow-2xl">
+    <div className="fixed inset-0 z-[70] bg-black/82 sm:p-5" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && onClose()}>
+      <div ref={panelRef} role="dialog" aria-modal="true" aria-labelledby="global-search-title" onKeyDown={handlePanelKeyDown} className="flex h-[100dvh] w-full flex-col overflow-hidden bg-[#0c0d0f] sm:mx-auto sm:mt-[5vh] sm:h-[min(46rem,88vh)] sm:max-w-3xl sm:rounded-[14px] sm:border sm:border-white/15 sm:shadow-[0_24px_80px_rgba(0,0,0,.45)]">
         <header className="flex items-center gap-3 border-b border-white/10 p-4 sm:p-5">
           <div className="min-w-0 flex-1">
             <h2 id="global-search-title" className="sr-only">搜索 ClutchNest 内容</h2>
             <label htmlFor="global-search-input" className="sr-only">搜索选手、战队、准星、英雄、地图或打法</label>
-            <input ref={inputRef} id="global-search-input" type="search" autoComplete="off" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="搜索选手、战队、准星、英雄、地图或打法" className="min-h-12 w-full rounded-md border border-white/15 bg-black px-4 text-base text-white outline-none transition placeholder:text-zinc-700 focus:border-white/40 focus:ring-2 focus:ring-white/20" />
+            <input ref={inputRef} id="global-search-input" type="search" autoComplete="off" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="搜索选手、战队、准星、英雄、地图或打法" className="min-h-12 w-full rounded-md border border-white/15 bg-[#08090a] px-4 text-base text-white outline-none transition placeholder:text-zinc-600 focus:border-white/40 focus:ring-2 focus:ring-white/15" />
           </div>
           {query ? <button type="button" aria-label="清除搜索内容" onClick={() => setQuery("")} className="grid h-11 w-11 place-items-center rounded-md border border-white/10 text-sm text-zinc-500 transition hover:border-white/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50">清除</button> : null}
           <button type="button" aria-label="关闭全站搜索" onClick={onClose} className="grid h-11 w-11 place-items-center rounded-md border border-white/10 text-xl text-zinc-500 transition hover:border-white/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50">×</button>

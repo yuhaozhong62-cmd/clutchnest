@@ -59,15 +59,15 @@ export function ProCrosshairDetailDrawer({
   }, [onClose]);
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/70" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && onClose()}>
+    <div className="fixed inset-0 z-50 bg-black/82" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && onClose()}>
       <div
         ref={panelRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="pro-crosshair-detail-title"
-        className="absolute inset-x-0 bottom-0 max-h-[90vh] overflow-y-auto rounded-t-lg border border-white/15 bg-[#09090a] shadow-2xl sm:inset-y-0 sm:left-auto sm:right-0 sm:max-h-none sm:w-[min(44rem,92vw)] sm:rounded-none sm:border-y-0 sm:border-r-0"
+        className="absolute inset-x-0 bottom-0 max-h-[90vh] overflow-y-auto rounded-t-[14px] border border-white/15 bg-[#0c0d0f] shadow-[0_20px_70px_rgba(0,0,0,.5)] sm:inset-y-0 sm:left-auto sm:right-0 sm:max-h-none sm:w-[min(42rem,92vw)] sm:rounded-none sm:border-y-0 sm:border-r-0"
       >
-        <header className="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-white/10 bg-[#09090a]/95 px-5 py-4 backdrop-blur-xl sm:px-7">
+        <header className="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-white/[0.08] bg-[#0c0d0f]/96 px-5 py-4 backdrop-blur-md sm:px-7">
           <div className="min-w-0">
             <p className="text-xs font-semibold text-valorant">{profile.isCurrentRoster ? `${profile.teamId.toUpperCase()} 现役选手` : `${profile.teamId.toUpperCase()} 历史资料`}</p>
             <h2 id="pro-crosshair-detail-title" className="truncate text-lg font-semibold text-white">{profile.displayName} · {version.titleZh}</h2>
@@ -102,7 +102,7 @@ export function ProCrosshairDetailDrawer({
                   aria-label={`切换到${getVersionLabel(item.versionStatus)}准星版本`}
                   onClick={() => onSelectVersion(item)}
                   aria-pressed={item.id === version.id}
-                  className={`min-h-10 shrink-0 rounded-md border px-3 text-xs transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 ${item.id === version.id ? "border-white bg-white text-black" : "border-white/10 text-zinc-400 hover:border-white/30 hover:text-white"}`}
+                  className="filter-pill shrink-0 px-3 text-xs focus-visible:outline-none"
                 >
                   {getVersionLabel(item.versionStatus)}
                 </button>
@@ -112,10 +112,10 @@ export function ProCrosshairDetailDrawer({
 
           <ProCrosshairPreview settings={version.normalizedSettings} label={`${profile.displayName} ${version.titleZh}`} large />
 
-          <section className="rounded-md border border-white/10 bg-black/40 p-4">
-            <p className="text-xs text-zinc-600">完整导入代码</p>
+          <section className="rounded-md border border-white/[0.08] bg-black/25 p-4">
+            <p className="text-xs text-zinc-500">完整导入代码</p>
             {version.code ? (
-              <code className="mt-3 block break-all text-xs leading-6 text-zinc-300">{version.code}</code>
+              <code className="mt-3 block break-all font-mono text-xs leading-6 text-zinc-300">{version.code}</code>
             ) : (
               <p className="mt-3 text-sm text-amber-200">暂未找到足够可靠的近期完整代码</p>
             )}

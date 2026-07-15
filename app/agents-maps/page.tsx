@@ -11,14 +11,14 @@ export const metadata: Metadata = {
 
 export default function AgentsMapsPage() {
   return (
-    <div className="mx-auto max-w-6xl px-5 py-16 sm:py-24">
-      <div className="max-w-3xl">
-        <h1 className="text-4xl font-black text-white sm:text-5xl">英雄与地图</h1>
-        <p className="mt-2 text-sm text-zinc-600">Agents & Maps</p>
-        <p className="mt-5 text-base leading-8 text-zinc-300">
+    <div className="site-container page-shell">
+      <div className="page-header">
+        <h1 className="page-title">英雄与地图</h1>
+        <p className="mt-2 page-kicker">Agents & Maps</p>
+        <p className="mt-5 page-lead">
           选择英雄，再选择地图，查看这个英雄在不同地图上的点位、控图思路和实战打法。
         </p>
-        <p className="mt-2 text-sm leading-7 text-zinc-600">
+        <p className="mt-2 support-copy">
           Choose an agent and a map to view strategy notes, utility points and game sense.
         </p>
       </div>

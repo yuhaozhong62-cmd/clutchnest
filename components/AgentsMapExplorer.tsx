@@ -101,7 +101,7 @@ export function AgentsMapExplorer() {
         />
 
         <div className="grid gap-6 lg:grid-cols-[18rem_minmax(0,1fr)]">
-          <aside className="self-start rounded-lg border border-white/10 bg-panel/60 p-4">
+          <aside className="surface-panel self-start p-4">
             <section>
               <p className="text-xs text-zinc-600">已选地图</p>
               <p className="mt-1 text-lg font-semibold text-white">{selectedMap.name}</p>
@@ -206,7 +206,7 @@ function AgentSelector({
   compact?: boolean;
 }) {
   return (
-    <section className={compact ? "" : "rounded-lg border border-white/10 bg-panel/40 p-5"}>
+    <section className={compact ? "" : "surface-panel p-5"}>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h2 className="text-xl font-semibold text-white">选择英雄</h2>
@@ -234,7 +234,7 @@ function AgentSelector({
         ))}
       </div>
 
-      <div className="mt-4 rounded-md border border-white/10 bg-black/35 p-4">
+      <div className="mt-4 rounded-md border border-white/[0.08] bg-black/25 p-4">
         <div className="flex items-center gap-2">
           <p className="font-semibold text-white">{selectedAgent.name}</p>
           <span className="text-xs text-zinc-500">{selectedAgent.roleCn}</span>
@@ -259,7 +259,7 @@ function AgentCard({ agent, active, priority, onClick }: { agent: ValorantAgent;
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className={`group relative min-w-0 overflow-hidden rounded-lg border text-left transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 ${active ? "border-valorant bg-valorant/[0.07]" : "border-white/10 bg-black/35 hover:border-white/30"}`}
+      className={`group relative min-w-0 overflow-hidden rounded-[10px] border text-left transition duration-150 focus-visible:outline-none ${active ? "border-valorant/55 bg-valorant/[0.06]" : "border-white/10 bg-black/25 hover:border-white/25"}`}
     >
       <div className="relative aspect-[4/5] overflow-hidden border-b border-white/10 bg-zinc-950">
         {agent.portrait && !imageFailed ? (
@@ -270,7 +270,7 @@ function AgentCard({ agent, active, priority, onClick }: { agent: ValorantAgent;
             height={1000}
             sizes="(max-width: 539px) calc(50vw - 50px), (max-width: 1023px) 28vw, (max-width: 1279px) 27vw, 190px"
             priority={priority}
-            className="h-full w-full object-cover transition duration-200 group-hover:scale-[1.015]"
+            className="h-full w-full object-cover transition duration-200 group-hover:scale-[1.01]"
             onError={() => setImageFailed(true)}
           />
         ) : <AgentImagePlaceholder agent={agent} />}
@@ -293,8 +293,8 @@ function AgentImagePlaceholder({ agent }: { agent: ValorantAgent }) {
   return (
     <div className="grid h-full w-full place-items-center bg-zinc-950 text-center">
       <span>
-        <span className="block text-2xl font-black text-zinc-700">{agent.name.slice(0, 2).toUpperCase()}</span>
-        <span className="mt-2 block text-xs text-zinc-600">{agent.roleCn}</span>
+        <span className="block text-2xl font-black text-zinc-600">{agent.name.slice(0, 2).toUpperCase()}</span>
+        <span className="mt-2 block text-xs text-zinc-500">{agent.roleCn}</span>
       </span>
     </div>
   );
@@ -306,7 +306,7 @@ function FilterButton({ active, label, onClick }: { active: boolean; label: stri
       type="button"
       aria-pressed={active}
       onClick={onClick}
-      className={`min-h-9 rounded-md border px-3 py-2 text-xs font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 ${active ? "border-white/35 bg-white text-black" : "border-white/10 text-zinc-400 hover:border-white/30 hover:text-white"}`}
+      className="filter-pill min-h-9 px-3 py-2 text-xs font-semibold focus-visible:outline-none"
     >
       {label}
     </button>
@@ -315,7 +315,7 @@ function FilterButton({ active, label, onClick }: { active: boolean; label: stri
 
 function MapPool({ selectedId, onSelect, compact = false }: { selectedId: string; onSelect: (id: string) => void; compact?: boolean }) {
   return (
-    <section className={compact ? "" : "rounded-lg border border-white/10 bg-panel/40 p-5"}>
+    <section className={compact ? "" : "surface-panel p-5"}>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h2 className="text-xl font-semibold text-white">本赛季地图池</h2>
@@ -346,7 +346,7 @@ function MapCard({ map, active, priority, onClick }: { map: ValorantMap; active:
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className={`group min-w-0 overflow-hidden rounded-lg border text-left transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 ${active ? "border-valorant bg-valorant/[0.07]" : "border-white/10 bg-black/35 hover:border-white/30"}`}
+      className={`group min-w-0 overflow-hidden rounded-[10px] border text-left transition duration-150 focus-visible:outline-none ${active ? "border-valorant/55 bg-valorant/[0.06]" : "border-white/10 bg-black/25 hover:border-white/25"}`}
     >
       <div className="relative aspect-video overflow-hidden border-b border-white/10 bg-zinc-950">
         {map.coverImage && !imageFailed ? (
@@ -356,7 +356,7 @@ function MapCard({ map, active, priority, onClick }: { map: ValorantMap; active:
             fill
             sizes="(max-width: 519px) calc(100vw - 74px), (max-width: 1023px) 45vw, (max-width: 1279px) 35vw, 260px"
             priority={priority}
-            className="object-cover transition duration-200 group-hover:scale-[1.015]"
+            className="object-cover transition duration-200 group-hover:scale-[1.01]"
             onError={() => setImageFailed(true)}
           />
         ) : <MapImagePlaceholder name={map.name} />}
@@ -379,7 +379,7 @@ function SelectionGroup({ title, children, separated = false }: { title: string;
 
 function SelectionButton({ active, title, onClick }: { active: boolean; title: string; onClick: () => void }) {
   return (
-    <button type="button" aria-pressed={active} onClick={onClick} className={`w-full rounded-md border p-3 text-left transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 ${active ? "border-valorant bg-valorant/10 text-white" : "border-white/10 text-zinc-400 hover:border-white/25 hover:text-white"}`}>
+    <button type="button" aria-pressed={active} onClick={onClick} className="filter-pill w-full p-3 text-left focus-visible:outline-none">
       <span className="block text-sm font-semibold">{title}</span>
     </button>
   );
@@ -388,9 +388,9 @@ function SelectionButton({ active, title, onClick }: { active: boolean; title: s
 function MobileSection({ step, current, number, title, summary, onOpen, children }: { step: MobileStep; current: MobileStep; number: string; title: string; summary?: string; onOpen: (step: MobileStep) => void; children: ReactNode }) {
   const active = step === current;
   return (
-    <section className="rounded-lg border border-white/10 bg-panel/60">
+    <section className="surface-panel">
       <button type="button" onClick={() => onOpen(step)} aria-expanded={active} className="flex w-full items-center gap-3 p-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/40">
-        <span className={`grid h-7 w-7 place-items-center rounded-full border text-xs ${active ? "border-valorant bg-valorant text-white" : "border-white/15 text-zinc-500"}`}>{number}</span>
+        <span className={`grid h-7 w-7 place-items-center rounded-full border text-xs ${active ? "border-valorant/60 bg-valorant/15 text-white" : "border-white/15 text-zinc-500"}`}>{number}</span>
         <span className="font-semibold text-white">{title}</span>
         {!active && summary ? <span className="ml-auto truncate text-xs text-zinc-500">{summary}</span> : null}
       </button>
@@ -403,7 +403,7 @@ function MapCanvas({ map, points, selectedPoint, onSelect }: { map: ValorantMap;
   const [imageFailed, setImageFailed] = useState(false);
 
   return (
-    <section className="relative min-h-[340px] overflow-hidden rounded-lg border border-white/10 bg-black sm:min-h-[540px]">
+    <section className="relative min-h-[340px] overflow-hidden rounded-[14px] border border-white/10 bg-black sm:min-h-[540px]">
       {map.overviewImage && !imageFailed ? (
         <Image
           src={map.overviewImage}
@@ -450,7 +450,7 @@ function EmptyPoints() {
 
 function EmptyStrategy({ agent, map }: { agent: string; map: string }) {
   return (
-    <article className="rounded-lg border border-white/10 bg-panel/70 p-5 sm:p-7">
+    <article className="surface-panel p-5 sm:p-7">
       <p className="text-sm text-zinc-500">{agent} · {map}</p>
       <h2 className="mt-3 text-xl font-semibold text-white">这个英雄在这张地图上暂时还没有攻略。</h2>
       <p className="mt-3 text-sm leading-7 text-zinc-500">HAO 会在实战测试后逐步加入点位、守点思路与技能用法。</p>
@@ -472,7 +472,7 @@ function TacticalGuideLink({ href }: { href: string }) {
 
 function StrategyDetail({ agent, map, point }: { agent: string; map: string; point: LineupPoint }) {
   return (
-    <article className="rounded-lg border border-white/10 bg-panel/70 p-5 sm:p-7">
+    <article className="surface-panel p-5 sm:p-7">
       <p className="text-sm text-zinc-500">{agent} · {map} · {point.name}</p>
       <h2 className="mt-3 text-2xl font-semibold text-white">{point.name}</h2>
       <div className="mt-6 grid min-h-36 place-items-center rounded-md border border-white/10 bg-black/50 px-5 text-center text-sm text-zinc-500 grid-surface">{point.screenshotLabel}</div>

@@ -61,7 +61,7 @@ export function CopyButton({ value, disabled = false, invalidReason, compact = f
       disabled={unavailable}
       aria-label={label}
       title={unavailable ? invalidReason : undefined}
-      className={`inline-flex min-h-11 items-center justify-center rounded-md border px-3 py-2 text-xs font-semibold transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 ${compact ? "min-w-24" : "min-w-32"} ${unavailable ? "cursor-not-allowed border-white/10 bg-white/[0.02] text-zinc-600" : status === "error" ? "border-red-500/50 bg-red-500/10 text-red-200" : "border-white/15 bg-white/[0.04] text-white hover:border-white/70 hover:bg-white hover:text-black active:scale-[0.98]"}`}
+      className={`inline-flex min-h-11 items-center justify-center rounded-md border px-3 py-2 text-xs font-semibold transition duration-150 focus-visible:outline-none ${compact ? "min-w-24" : "min-w-32"} ${unavailable ? "cursor-not-allowed border-white/10 bg-white/[0.02] text-zinc-600" : status === "error" ? "border-red-500/40 bg-red-500/[0.08] text-red-200" : status === "copied" ? "border-emerald-500/35 bg-emerald-500/[0.07] text-emerald-100" : "border-white/20 bg-white/[0.04] text-white hover:border-white/40 hover:bg-white/[0.08]"}`}
     >
       <span aria-live="polite">
         {unavailable ? "准星待核实" : status === "copied" ? "已复制 ✓" : status === "error" ? "复制失败，请手动选择代码。" : "复制准星代码"}

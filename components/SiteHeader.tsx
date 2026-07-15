@@ -41,17 +41,17 @@ export function SiteHeader() {
 
   return (
     <header
-      className="sticky top-0 z-40 border-b border-white/10 bg-black/70 backdrop-blur-xl supports-[backdrop-filter]:bg-black/55"
+      className="sticky top-0 z-40 border-b border-white/[0.07] bg-[#08090a]/90 backdrop-blur-md supports-[backdrop-filter]:bg-[#08090a]/78"
       onKeyDown={(event) => {
         if (event.key === "Escape") setIsOpen(false);
       }}
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
-        <Link href="/" className="group flex items-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40" aria-label="ClutchNest 首页 / Home" onClick={() => setIsOpen(false)}>
-          <span className="flex h-9 w-9 items-center justify-center rounded-md border border-white/15 bg-white text-sm font-black text-black transition duration-300 group-hover:border-valorant group-hover:bg-valorant group-hover:text-white">
+      <div className="site-container flex h-[68px] items-center justify-between">
+        <Link href="/" className="group flex items-center gap-3 rounded-sm focus-visible:outline-none" aria-label="ClutchNest 首页 / Home" onClick={() => setIsOpen(false)}>
+          <span className="flex h-8 w-8 items-center justify-center rounded-[6px] border border-white/15 bg-[#f1f2f4] text-xs font-black text-black transition-colors duration-150 group-hover:border-white group-hover:bg-white">
             CN
           </span>
-          <span className="text-sm font-semibold tracking-[0.14em] text-white">CLUTCHNEST</span>
+          <span className="text-sm font-semibold tracking-[0.08em] text-white">CLUTCHNEST</span>
         </Link>
 
         <div className="flex items-center gap-2">
@@ -61,7 +61,7 @@ export function SiteHeader() {
             ))}
           </nav>
 
-          <button type="button" aria-label="打开全站搜索" onClick={(event) => openSearch(event.currentTarget)} className="inline-flex min-h-10 items-center justify-center rounded-md border border-white/10 px-3 text-sm text-zinc-400 transition hover:border-white/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50">
+          <button type="button" aria-label="打开全站搜索" onClick={(event) => openSearch(event.currentTarget)} className="btn-ghost min-h-10 border border-white/10 px-3">
             搜索
           </button>
 
@@ -71,7 +71,7 @@ export function SiteHeader() {
           aria-expanded={isOpen}
           aria-controls="mobile-navigation"
           onClick={() => setIsOpen((value) => !value)}
-          className="group inline-flex h-10 w-10 items-center justify-center rounded-md border border-white/10 bg-white/[0.03] transition duration-300 hover:border-white/40 hover:bg-white hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 md:hidden"
+          className="group inline-flex h-10 w-10 items-center justify-center rounded-md border border-white/10 text-zinc-300 transition duration-200 hover:border-white/25 hover:text-white focus-visible:outline-none md:hidden"
         >
           <span className="flex w-4 flex-col gap-1.5" aria-hidden="true">
             <span className={`h-px bg-current transition duration-300 ${isOpen ? "translate-y-[7px] rotate-45" : ""}`} />
@@ -85,21 +85,21 @@ export function SiteHeader() {
       <div
         id="mobile-navigation"
         aria-hidden={!isOpen}
-        className={`overflow-hidden border-t border-white/10 transition-all duration-300 md:hidden ${
+        className={`overflow-hidden border-t border-white/[0.07] bg-[#08090a] transition-all duration-200 md:hidden ${
           isOpen ? "max-h-80 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <nav className="mx-auto grid max-w-6xl gap-1 px-5 py-3" aria-label="Mobile navigation">
+        <nav className="site-container grid gap-1 py-3" aria-label="Mobile navigation">
           {site.nav.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               tabIndex={isOpen ? 0 : -1}
               onClick={() => setIsOpen(false)}
-              className={`rounded-md px-3 py-3 text-sm transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 ${
+              className={`relative rounded-md px-3 py-3 text-sm transition duration-150 focus-visible:outline-none ${
                 (item.href === "/" ? pathname === "/" : pathname.startsWith(item.href))
-                  ? "bg-white text-black"
-                  : "text-zinc-300 hover:bg-white/[0.08] hover:text-white"
+                  ? "bg-white/[0.045] font-semibold text-white before:absolute before:inset-y-3 before:left-0 before:w-px before:bg-valorant"
+                  : "text-zinc-400 hover:bg-white/[0.03] hover:text-white"
               }`}
             >
               {item.labelCn}
@@ -122,14 +122,14 @@ function NavLink({
   return (
     <Link
       href={item.href}
-      className={`group relative rounded-md px-4 py-2 text-sm transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 ${
-        active ? "text-white" : "text-zinc-400 hover:bg-white/[0.06] hover:text-white"
+      className={`group relative px-3 py-2 text-sm transition-colors duration-150 focus-visible:outline-none ${
+        active ? "font-medium text-white" : "text-zinc-400 hover:text-white"
       }`}
     >
       {item.labelCn}
       <span
-        className={`absolute inset-x-4 -bottom-px h-px bg-valorant transition duration-300 ${
-          active ? "opacity-100" : "opacity-0 group-hover:opacity-70"
+        className={`absolute inset-x-3 -bottom-[14px] h-px bg-valorant transition-opacity duration-150 ${
+          active ? "opacity-100" : "opacity-0"
         }`}
       />
     </Link>

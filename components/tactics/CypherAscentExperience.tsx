@@ -76,17 +76,17 @@ export function CypherAscentExperience() {
   }
 
   return (
-    <div className="mx-auto max-w-[90rem] px-5 py-10 sm:py-14">
+    <div className="mx-auto max-w-[90rem] px-5 py-10 sm:px-8 sm:py-14 lg:px-10">
       <Link href="/agents-maps" className="inline-flex min-h-10 items-center gap-2 text-sm font-semibold text-zinc-500 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40">← 返回英雄与地图</Link>
 
-      <header className="mt-8 border-b border-white/10 pb-8 sm:pb-10">
+      <header className="mt-8 border-b border-white/[0.08] pb-8 sm:pb-10">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
-            <p className="text-xs font-semibold uppercase text-valorant">Agents & Maps · Tactical Database</p>
-            <h1 className="mt-3 text-4xl font-black text-white sm:text-6xl">保安 × 空岛</h1>
+            <p className="text-xs font-semibold text-valorant">英雄与地图 · 战术库</p>
+            <h1 className="mt-3 text-4xl font-semibold text-white sm:text-5xl">保安 × 空岛</h1>
             <p className="mt-2 text-sm text-zinc-500">Cypher × Ascent</p>
             <p className="mt-6 max-w-2xl text-base leading-8 text-zinc-300">用摄像头建立信息，用陷阱线守住通道，再根据对手的反应调整站位。这里记录的是可解释的战术框架，不是脱离版本的像素收藏。</p>
-            <p className="mt-2 text-xs leading-5 text-zinc-600">Chinese-first tactical notes, researched and organized by HAO.</p>
+            <p className="mt-2 text-xs leading-5 text-zinc-500">Chinese-first tactical notes, researched and organized by HAO.</p>
           </div>
           <dl className="grid grid-cols-3 gap-px overflow-hidden rounded-md border border-white/10 bg-white/10 text-center lg:w-[25rem]">
             <Stat value={String(publishedCypherAscentTactics.length)} label="公开战术" />
@@ -128,5 +128,5 @@ export function CypherAscentExperience() {
 }
 
 function Stat({ value, label }: { value: string; label: string }) {
-  return <div className="bg-[#090909] px-3 py-4"><dt className="text-lg font-semibold text-white">{value}</dt><dd className="mt-1 text-[10px] text-zinc-600">{label}</dd></div>;
+  return <div className="bg-[#0a0b0d] px-3 py-4"><dt className="text-lg font-semibold text-white">{value}</dt><dd className="mt-1 text-[10px] text-zinc-500">{label}</dd></div>;
 }

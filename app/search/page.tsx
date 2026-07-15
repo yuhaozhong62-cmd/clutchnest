@@ -18,11 +18,11 @@ export async function generateMetadata({ searchParams }: SearchPageProps): Promi
 
 export default function SearchPage() {
   return (
-    <div className="mx-auto min-h-[70vh] max-w-6xl px-5 py-16 sm:py-24">
-      <header className="max-w-3xl">
-        <h1 className="text-4xl font-black text-white sm:text-5xl">搜索</h1>
-        <p className="mt-2 text-sm text-zinc-600">Global Search</p>
-        <p className="mt-5 text-base leading-8 text-zinc-300">快速找到 ClutchNest 中已经发布的准星、高分主播、选手、战队、英雄、地图和实战打法。</p>
+    <div className="site-container page-shell min-h-[70vh]">
+      <header className="page-header">
+        <h1 className="page-title">搜索</h1>
+        <p className="mt-2 page-kicker">Global Search</p>
+        <p className="mt-5 page-lead">快速找到 ClutchNest 中已经发布的准星、高分主播、选手、战队、英雄、地图和实战打法。</p>
       </header>
       <Suspense fallback={<div className="mt-10 border-y border-white/10 py-10 text-sm text-zinc-600">正在载入搜索索引…</div>}><SearchPageClient /></Suspense>
     </div>
