@@ -80,5 +80,5 @@ export function getSearchCategoryCounts(results: SearchResult[]) {
     counts.all += 1;
     counts[result.item.type] += 1;
     return counts;
-  }, { all: 0, crosshair: 0, player: 0, team: 0, agent: 0, map: 0, tactic: 0 });
+  }, { all: 0, crosshair: 0, streamer: 0, player: 0, team: 0, agent: 0, map: 0, tactic: 0 });
 }

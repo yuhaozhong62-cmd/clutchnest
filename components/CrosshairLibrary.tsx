@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { CrosshairCard } from "@/components/CrosshairCard";
 import { TeamCrosshairSection } from "@/components/crosshairs/TeamCrosshairSection";
+import { StreamerCrosshairSection } from "@/components/crosshairs/StreamerCrosshairSection";
 import { crosshairFilters, publishedCrosshairs, type CrosshairFilterId } from "@/lib/data/crosshairs";
 import { edgTeamDefinition } from "@/lib/data/crosshairTeams/edg";
 import { xlgTeamDefinition } from "@/lib/data/crosshairTeams/xlg";
@@ -18,6 +19,7 @@ const teamOptions = [
   { id: "edg", label: "EDG" },
   { id: "xlg", label: "XLG" },
   { id: "prx", label: "PRX" },
+  { id: "streamer", label: "高分主播" },
   { id: "pro", label: "其他职业选手" }
 ] as const;
 
@@ -26,6 +28,7 @@ export function CrosshairLibrary() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const team = searchParams.get("team") ?? "all";
+  const isStreamerMode = searchParams.get("type") === "streamer";
   const query = searchParams.get("q") ?? "";
   const filterParam = searchParams.get("filter") as CrosshairFilterId | null;
   const activeFilter = filterParam && validFilterIds.has(filterParam) ? filterParam : "all";
@@ -53,6 +56,15 @@ export function CrosshairLibrary() {
     else router.push(href, { scroll: false });
   }
 
+  function selectContentSource(id: (typeof teamOptions)[number]["id"]) {
+    const params = new URLSearchParams(searchParams.toString());
+    ["team", "player", "crosshair", "type", "color", "status", "sort", "filter", "region", "streamer"].forEach((key) => params.delete(key));
+    if (id === "streamer") params.set("type", "streamer");
+    else if (id !== "all") params.set("team", id);
+    const suffix = params.toString();
+    router.push(suffix ? `${pathname}?${suffix}` : pathname, { scroll: false });
+  }
+
   const filteredCrosshairs = useMemo(() => {
     return publishedCrosshairs.filter((crosshair) => {
       if (team === "hao" && crosshair.contentType !== "hao-tested") return false;
@@ -65,16 +77,16 @@ export function CrosshairLibrary() {
   }, [activeFilter, query, team]);
 
   const filters = new Map(crosshairFilters.map((filter) => [filter.id, filter]));
-  const showEdg = team === "all" || team === "edg";
-  const showXlg = team === "all" || team === "xlg";
-  const showPrx = team === "all" || team === "prx";
-  const showExisting = team !== "edg" && team !== "xlg" && team !== "prx";
+  const showEdg = !isStreamerMode && (team === "all" || team === "edg");
+  const showXlg = !isStreamerMode && (team === "all" || team === "xlg");
+  const showPrx = !isStreamerMode && (team === "all" || team === "prx");
+  const showExisting = !isStreamerMode && team !== "edg" && team !== "xlg" && team !== "prx";
 
   return (
     <div className="mt-10">
       <section className="border-y border-white/10 py-5">
-        <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,0.7fr)] lg:items-end">
-          <div>
+        <div className="grid min-w-0 gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,0.7fr)] lg:items-end">
+          <div className="min-w-0">
             <p className="mb-3 text-xs text-zinc-600">内容来源</p>
             <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1" aria-label="准星队伍筛选">
               {teamOptions.map((option) => (
@@ -82,16 +94,16 @@ export function CrosshairLibrary() {
                   key={option.id}
                   type="button"
                   aria-label={`筛选内容：${option.label}`}
-                  aria-pressed={team === option.id}
-                  onClick={() => updateQuery("team", option.id)}
-                  className={`min-h-10 shrink-0 rounded-md border px-3 text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 ${team === option.id ? "border-white bg-white text-black" : "border-white/10 text-zinc-400 hover:border-white/30 hover:text-white"}`}
+                  aria-pressed={option.id === "streamer" ? isStreamerMode : !isStreamerMode && team === option.id}
+                  onClick={() => selectContentSource(option.id)}
+                  className={`min-h-10 shrink-0 rounded-md border px-3 text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 ${(option.id === "streamer" ? isStreamerMode : !isStreamerMode && team === option.id) ? "border-white bg-white text-black" : "border-white/10 text-zinc-400 hover:border-white/30 hover:text-white"}`}
                 >
                   {option.label}
                 </button>
               ))}
             </div>
           </div>
-          <label>
+          <label className="min-w-0">
             <span className="mb-2 block text-xs text-zinc-600">搜索选手、中文名、颜色或准星类型</span>
             <input
               type="search"
@@ -103,6 +115,8 @@ export function CrosshairLibrary() {
           </label>
         </div>
       </section>
+
+      {isStreamerMode ? <StreamerCrosshairSection searchQuery={query} /> : null}
 
       {showEdg ? <TeamCrosshairSection team={edgTeamDefinition} searchQuery={query} /> : null}
       {showXlg ? <TeamCrosshairSection team={xlgTeamDefinition} searchQuery={query} /> : null}
@@ -153,7 +167,7 @@ export function CrosshairLibrary() {
         </section>
       ) : null}
 
-      <p className="mt-10 text-sm text-zinc-500">更多 HAO 实测内容与职业选手公开设置会持续更新。</p>
+      <p className="mt-10 text-sm text-zinc-500">更多 HAO 实测内容、职业选手与高分主播公开设置会持续更新。</p>
     </div>
   );
 }

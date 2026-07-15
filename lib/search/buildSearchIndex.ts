@@ -1,5 +1,6 @@
 import { publishedAgents } from "@/lib/data/agents";
 import { publishedCrosshairs, crosshairFilters } from "@/lib/data/crosshairs";
+import { streamerProfiles, streamerRegionLabels } from "@/lib/data/crosshairStreamers";
 import { edgTeamDefinition } from "@/lib/data/crosshairTeams/edg";
 import { prxTeamDefinition } from "@/lib/data/crosshairTeams/prx";
 import type { CrosshairTeamDefinition } from "@/lib/data/crosshairTeams/types";
@@ -131,6 +132,44 @@ function buildTeamItems(team: CrosshairTeamDefinition): SearchIndexItem[] {
   return [teamItem, ...profileItems];
 }
 
+function buildStreamerItems(): SearchIndexItem[] {
+  return streamerProfiles.flatMap((profile) => {
+    const regionLabel = streamerRegionLabels[profile.region];
+    const region = regionLabel.zh;
+    const profileItem = createItem({
+      id: `streamer:${profile.streamerId}`,
+      type: "streamer",
+      title: profile.displayName,
+      subtitle: [profile.realName, region, profile.primaryPlatform.toUpperCase()].filter(Boolean).join(" · "),
+      description: `${region}高分主播，公开段位记录为 ${profile.publicRank ?? "高分段"}，已收录 ${profile.crosshairs.length} 条近期准星设置。`,
+      href: `/crosshairs?type=streamer&region=${profile.region}&streamer=${profile.streamerId}`,
+      keywords: [profile.channelName, profile.country ?? "", profile.streamLanguage ?? "", profile.ladderRegion, regionLabel.en, profile.publicRank ?? "", profile.riotId ?? "", "高分主播", "Radiant", "直播"],
+      aliases: [profile.streamerId, profile.displayName, profile.realName ?? "", ...profile.searchAliases].filter(Boolean),
+      tags: [region, profile.primaryPlatform, profile.ladderStatus],
+      playerId: profile.streamerId,
+      status: "published",
+      updatedAt: profile.rankVerifiedAt,
+      meta: { region, platform: profile.primaryPlatform, crosshairCount: profile.crosshairs.length }
+    });
+    const crosshairs = profile.crosshairs.map((version) => createItem({
+      id: `crosshair:streamer:${profile.streamerId}:${version.id}`,
+      type: "crosshair" as const,
+      title: version.titleZh,
+      subtitle: version.titleEn,
+      description: version.summaryZh,
+      href: `/crosshairs?type=streamer&region=${profile.region}&streamer=${profile.streamerId}&crosshair=${version.id}`,
+      keywords: [version.code ?? "", profile.displayName, profile.channelName, profile.publicRank ?? "", region, version.color ?? "", "高分主播准星", "Radiant"],
+      aliases: [version.slug, profile.streamerId, profile.displayName, ...profile.searchAliases],
+      tags: [...version.styleTags, region, "主播公开设置", version.verificationStatus],
+      playerId: profile.streamerId,
+      status: "published" as const,
+      updatedAt: version.lastVerifiedAt,
+      meta: { code: version.code, player: profile.displayName, team: "高分主播", style: version.styleTags.join(" · "), region, platform: profile.primaryPlatform }
+    }));
+    return [profileItem, ...crosshairs];
+  });
+}
+
 function buildAgentItems(): SearchIndexItem[] {
   return publishedAgents.map((agent) => {
     const guideCount = agent.id === "cypher" ? 1 : 0;
@@ -212,6 +251,7 @@ function buildTacticItems(): SearchIndexItem[] {
 export function buildSearchIndex(): SearchIndexItem[] {
   return [
     ...buildLibraryCrosshairs(),
+    ...buildStreamerItems(),
     ...teams.flatMap(buildTeamItems),
     ...buildAgentItems(),
     ...buildMapItems(),

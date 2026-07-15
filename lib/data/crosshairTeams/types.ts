@@ -66,8 +66,54 @@ export type CrosshairVersion = {
   sources: CrosshairSource[];
   haoTestStatus: "untested" | "testing" | "tested";
   haoReview?: string;
-  contentType?: "pro-reference";
+  contentType?: "pro-reference" | "streamer-reference";
   createdBy?: "ClutchNest Research";
+  status?: "published";
+  color?: string;
+  nextReviewAt?: string;
+  analysis?: {
+    size: string;
+    occlusion: string;
+    backgroundVisibility: string;
+    longRange: string;
+    closeRange: string;
+    tapFire: string;
+    burstFire: string;
+    spray: string;
+    beginnerAdaptation: string;
+    aimingHabit: string;
+  };
+};
+
+export type StreamerRegion = "asia-pacific" | "europe" | "north-america";
+
+export type StreamerProfile = {
+  streamerId: string;
+  displayName: string;
+  realName?: string;
+  initials: string;
+  region: StreamerRegion;
+  country?: string;
+  streamLanguage?: string;
+  primaryPlatform: "twitch" | "youtube" | "bilibili" | "kick" | "other";
+  channelName: string;
+  channelUrl: string;
+  activityStatus: "active" | "recently-active";
+  lastValorantContentAt?: string;
+  contentFrequency: string;
+  activityConfidence: "high" | "medium";
+  activitySources: CrosshairSource[];
+  ladderStatus: "current-radiant" | "recent-radiant" | "high-immortal";
+  ladderRegion: string;
+  publicGameId?: string;
+  riotId?: string;
+  publicRank?: string;
+  publicLeaderboardPosition?: number;
+  rankVerifiedAt: string;
+  rankSources: CrosshairSource[];
+  searchAliases: string[];
+  nextReviewAt: string;
+  crosshairs: CrosshairVersion[];
 };
 
 export type ProPlayerCrosshairProfile = {

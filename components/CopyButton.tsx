@@ -18,15 +18,6 @@ export function CopyButton({ value, disabled = false, invalidReason, compact = f
     let didCopy = false;
 
     try {
-      if (navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(value);
-        didCopy = true;
-      }
-    } catch {
-      didCopy = false;
-    }
-
-    if (!didCopy) {
       const textarea = document.createElement("textarea");
       textarea.value = value;
       textarea.setAttribute("readonly", "");
@@ -36,10 +27,23 @@ export function CopyButton({ value, disabled = false, invalidReason, compact = f
       textarea.select();
       didCopy = document.execCommand("copy");
       document.body.removeChild(textarea);
+    } catch {
+      didCopy = false;
+    }
+
+    if (!didCopy) {
+      try {
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(value);
+          didCopy = true;
+        }
+      } catch {
+        didCopy = false;
+      }
     }
 
     setStatus(didCopy ? "copied" : "error");
-    window.setTimeout(() => setStatus("idle"), didCopy ? 1800 : 2400);
+    window.setTimeout(() => setStatus("idle"), didCopy ? 2500 : 3000);
   }
 
   const label = unavailable
@@ -60,7 +64,7 @@ export function CopyButton({ value, disabled = false, invalidReason, compact = f
       className={`inline-flex min-h-11 items-center justify-center rounded-md border px-3 py-2 text-xs font-semibold transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 ${compact ? "min-w-24" : "min-w-32"} ${unavailable ? "cursor-not-allowed border-white/10 bg-white/[0.02] text-zinc-600" : status === "error" ? "border-red-500/50 bg-red-500/10 text-red-200" : "border-white/15 bg-white/[0.04] text-white hover:border-white/70 hover:bg-white hover:text-black active:scale-[0.98]"}`}
     >
       <span aria-live="polite">
-        {unavailable ? "准星待核实" : status === "copied" ? "已复制 ✓" : status === "error" ? "复制失败，请重试" : "复制准星代码"}
+        {unavailable ? "准星待核实" : status === "copied" ? "已复制 ✓" : status === "error" ? "复制失败，请手动选择代码。" : "复制准星代码"}
       </span>
     </button>
   );

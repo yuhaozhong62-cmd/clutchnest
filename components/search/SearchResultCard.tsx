@@ -62,6 +62,7 @@ function ResultVisual({ item, compact }: { item: SearchIndexItem; compact: boole
 function getVisualLabel(item: SearchIndexItem) {
   if (item.type === "team") return item.title.slice(0, 3).toUpperCase();
   if (item.type === "player") return item.title.slice(0, 2).toUpperCase();
+  if (item.type === "streamer") return item.title.slice(0, 2).toUpperCase();
   return searchTypeLabels[item.type].slice(0, 2);
 }
 
@@ -71,6 +72,7 @@ function getMetaText(item: SearchIndexItem) {
   if (!meta) return date;
   if (item.type === "crosshair") return [meta.player, meta.team, meta.style, date].filter(Boolean).join(" · ");
   if (item.type === "player") return [meta.team, `${meta.crosshairCount ?? 0} 条准星`].filter(Boolean).join(" · ");
+  if (item.type === "streamer") return [meta.region, meta.platform?.toUpperCase(), `${meta.crosshairCount ?? 0} 条准星`, date].filter(Boolean).join(" · ");
   if (item.type === "team") return `${meta.playerCount ?? 0} 名选手 · ${meta.crosshairCount ?? 0} 条准星 · ${meta.verifiedCount ?? 0} 条已验证`;
   if (item.type === "agent") return `${meta.role ?? "定位未记录"} · ${meta.guideCount ?? 0} 个已发布地图攻略`;
   if (item.type === "map") return `${meta.currentRotation ?? "赛季状态未记录"} · ${meta.guideCount ?? 0} 个已发布英雄攻略`;

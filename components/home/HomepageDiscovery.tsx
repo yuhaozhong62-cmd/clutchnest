@@ -41,7 +41,11 @@ export function HomepageDiscovery() {
 
       <section className="border-t border-white/10 bg-white/[0.015]">
         <div className="mx-auto max-w-6xl px-5 py-16 sm:py-20">
-          <SectionHeading title="精选战队专题" subtitle="Featured Teams" href="/crosshairs" linkLabel="进入准星库" />
+          <SectionHeading title="精选内容" subtitle="Featured Content" href="/crosshairs" linkLabel="进入准星库" />
+          <Link href="/crosshairs?type=streamer" className="group mt-8 grid gap-4 rounded-md border border-white/10 bg-black/30 p-5 transition hover:border-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
+            <div><p className="text-xs font-semibold text-valorant">GLOBAL HIGH-RANK STREAMERS</p><h3 className="mt-2 text-2xl font-semibold text-white">全球高分主播准星</h3><p className="mt-3 text-sm leading-7 text-zinc-500">亚太、欧洲和北美共 10 位高分主播的近期公开设置、完整代码与原创参数分析。</p></div>
+            <span className="text-sm font-semibold text-zinc-300 transition group-hover:translate-x-0.5 group-hover:text-white">查看主播准星 →</span>
+          </Link>
           <div className="mt-8 grid gap-4 md:grid-cols-3">
             {teams.map((team) => <FeaturedTeam key={team.id} team={team} />)}
           </div>

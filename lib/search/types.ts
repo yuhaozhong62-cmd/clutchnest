@@ -1,4 +1,4 @@
-export type SearchContentType = "crosshair" | "player" | "team" | "agent" | "map" | "tactic";
+export type SearchContentType = "crosshair" | "streamer" | "player" | "team" | "agent" | "map" | "tactic";
 
 export type SearchContentStatus = "published" | "draft" | "sample";
 
@@ -6,6 +6,8 @@ export type SearchItemMeta = {
   code?: string;
   player?: string;
   team?: string;
+  region?: string;
+  platform?: string;
   style?: string;
   role?: string;
   side?: string;
@@ -49,10 +51,11 @@ export type SearchResult = {
   matchedTerms: string[];
 };
 
-export const searchTypeOrder: SearchContentType[] = ["crosshair", "player", "team", "agent", "map", "tactic"];
+export const searchTypeOrder: SearchContentType[] = ["crosshair", "streamer", "player", "team", "agent", "map", "tactic"];
 
 export const searchTypeLabels: Record<SearchContentType, string> = {
   crosshair: "准星",
+  streamer: "主播",
   player: "选手",
   team: "战队",
   agent: "英雄",

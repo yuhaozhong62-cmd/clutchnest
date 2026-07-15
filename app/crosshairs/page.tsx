@@ -6,12 +6,18 @@ import { xlgCurrentRosterProfiles } from "@/lib/data/crosshairTeams/xlg";
 import { prxCurrentRosterProfiles } from "@/lib/data/crosshairTeams/prx";
 
 type CrosshairsPageProps = {
-  searchParams: Promise<{ team?: string | string[] }>;
+  searchParams: Promise<{ team?: string | string[]; type?: string | string[] }>;
 };
 
 export async function generateMetadata({ searchParams }: CrosshairsPageProps): Promise<Metadata> {
   const params = await searchParams;
   const team = Array.isArray(params.team) ? params.team[0] : params.team;
+  const contentType = Array.isArray(params.type) ? params.type[0] : params.type;
+  if (contentType === "streamer") {
+    const title = "全球高分主播准星代码";
+    const description = "查看亚服、欧服和美服高分 VALORANT 主播近期公开、可验证的准星代码、详细参数与原创预览。";
+    return { title, description, alternates: { canonical: "/crosshairs" }, openGraph: { title: `${title}｜ClutchNest`, description, url: "/crosshairs?type=streamer" } };
+  }
   const roster = team === "prx"
     ? prxCurrentRosterProfiles
     : team === "xlg"
