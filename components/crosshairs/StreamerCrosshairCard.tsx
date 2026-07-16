@@ -18,21 +18,21 @@ export function StreamerCrosshairCard({ profile, version, onDetails }: { profile
           <VerificationBadge status={version.verificationStatus} />
         </div>
         <div className="mt-4 flex flex-wrap gap-2">
-          <span className="rounded-full border border-valorant/30 px-2.5 py-1 text-[11px] text-valorant">{profile.publicRank ?? "高分段"}</span>
-          {version.styleTags.slice(0, 1).map((tag) => <span key={tag} className="rounded-full border border-white/10 px-2.5 py-1 text-[11px] text-zinc-500">{tag}</span>)}
+          <span className="content-tag border-valorant/30 text-valorant">{profile.publicRank ?? "高分段"}</span>
+          {version.styleTags.slice(0, 1).map((tag) => <span key={tag} className="content-tag">{tag}</span>)}
         </div>
-        <h3 className="mt-4 text-xl font-semibold text-white">{version.titleZh}</h3>
+        <h3 className="mt-4 break-words text-xl font-semibold leading-7 text-white">{version.titleZh}</h3>
         <p className="mt-1 text-xs text-zinc-500">{version.titleEn}</p>
-        <p className="mt-4 text-sm leading-6 text-zinc-400">{version.summaryZh}</p>
-        <div className="mt-5 rounded-md border border-white/[0.08] bg-black/25 p-3">
+        <p className="mt-4 line-clamp-3 min-h-[4.5rem] text-sm leading-6 text-zinc-400">{version.summaryZh}</p>
+        <div className="crosshair-code-panel mt-auto pt-3">
           <div className="flex items-center justify-between gap-3 text-xs text-zinc-500"><span>完整导入代码</span><span>核实 {version.lastVerifiedAt}</span></div>
-          <code className="mt-2 block overflow-hidden text-ellipsis whitespace-nowrap font-mono text-xs text-zinc-300">{version.code}</code>
+          <code className="mt-2 block max-w-full overflow-hidden text-ellipsis whitespace-nowrap font-mono text-xs text-zinc-300" title={version.code}>{version.code}</code>
           <div className="mt-3 flex flex-col gap-2 sm:flex-row">
             <CopyButton value={version.code} disabled={!validation.valid} invalidReason={validation.reasons.join("；")} compact />
-            <button type="button" onClick={onDetails} data-streamer-detail-trigger={`${profile.streamerId}-${version.id}`} className="btn-secondary min-h-11 flex-1 px-3 text-xs">查看详细分析</button>
+            <button type="button" onClick={onDetails} data-streamer-detail-trigger={`${profile.streamerId}-${version.id}`} className="btn-ghost min-h-11 flex-1 border border-white/10 px-3 text-xs">查看详细分析</button>
           </div>
         </div>
-        <p className="mt-4 border-t border-white/10 pt-4 text-xs leading-5 text-zinc-600">公开设置参考 · HAO 尚未实战测试 · 下次复核 {profile.nextReviewAt}</p>
+        <p className="mt-4 border-t border-white/[0.08] pt-4 text-xs leading-5 text-zinc-500">{profile.country} · {version.verificationStatus === "verified" ? "已验证" : version.verificationStatus === "likely" ? "较可信" : "待核实"} · 下次复核 {profile.nextReviewAt}</p>
       </div>
     </article>
   );

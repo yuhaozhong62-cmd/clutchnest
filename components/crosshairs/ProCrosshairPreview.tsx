@@ -37,7 +37,7 @@ export function ProCrosshairPreview({
         )}
       </div>
 
-      <div className="absolute bottom-3 left-3 flex rounded-md border border-white/10 bg-black/80 p-1" aria-label="准星预览背景">
+      <div className="absolute bottom-3 left-3 flex rounded-md border border-white/10 bg-black/85 p-1" aria-label="准星预览背景">
         {backgroundOptions.map((option) => (
           <button
             key={option.id}
@@ -45,7 +45,7 @@ export function ProCrosshairPreview({
             aria-label={`切换到${option.label}预览背景`}
             aria-pressed={background === option.id}
             onClick={() => setBackground(option.id)}
-            className={`min-h-8 rounded px-2 text-[11px] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 ${background === option.id ? "bg-white text-black" : "text-zinc-500 hover:text-white"}`}
+            className={`min-h-10 rounded px-2.5 text-[11px] transition focus-visible:outline focus-visible:outline-1 focus-visible:outline-valorant/70 ${background === option.id ? "bg-valorant/15 text-white" : "text-zinc-500 hover:text-white"}`}
           >
             {option.label}
           </button>

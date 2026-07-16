@@ -59,13 +59,13 @@ export function ProCrosshairDetailDrawer({
   }, [onClose]);
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/82" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && onClose()}>
+    <div className="fixed inset-0 z-50 bg-black/78" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && onClose()}>
       <div
         ref={panelRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="pro-crosshair-detail-title"
-        className="absolute inset-x-0 bottom-0 max-h-[90vh] overflow-y-auto rounded-t-[14px] border border-white/15 bg-[#0c0d0f] shadow-[0_20px_70px_rgba(0,0,0,.5)] sm:inset-y-0 sm:left-auto sm:right-0 sm:max-h-none sm:w-[min(42rem,92vw)] sm:rounded-none sm:border-y-0 sm:border-r-0"
+        className="absolute inset-x-0 bottom-0 max-h-[92dvh] overflow-y-auto overscroll-contain rounded-t-[14px] border border-white/15 bg-[#0c0d0f] shadow-[0_20px_70px_rgba(0,0,0,.5)] sm:inset-y-0 sm:left-auto sm:right-0 sm:max-h-none sm:w-[min(42rem,92vw)] sm:rounded-none sm:border-y-0 sm:border-r-0"
       >
         <header className="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-white/[0.08] bg-[#0c0d0f]/96 px-5 py-4 backdrop-blur-md sm:px-7">
           <div className="min-w-0">
@@ -77,13 +77,13 @@ export function ProCrosshairDetailDrawer({
             type="button"
             onClick={onClose}
             aria-label="关闭准星详情"
-            className="grid h-11 w-11 shrink-0 place-items-center rounded-md border border-white/15 text-xl text-zinc-400 transition hover:border-white/40 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+            className="grid h-11 w-11 shrink-0 place-items-center rounded-md border border-white/15 text-xl text-zinc-400 transition hover:border-white/30 hover:text-white focus-visible:outline focus-visible:outline-1 focus-visible:outline-valorant/70"
           >
             ×
           </button>
         </header>
 
-        <div className="space-y-8 px-5 py-6 sm:px-7 sm:py-8">
+        <div className="space-y-7 px-5 py-6 sm:px-7 sm:py-8">
           <div className="flex items-center gap-3">
             <div className="grid h-12 w-12 place-items-center border border-white/15 bg-white/[0.04] text-sm font-black">{profile.initials}</div>
             <div>
@@ -94,7 +94,7 @@ export function ProCrosshairDetailDrawer({
           </div>
 
           {profile.crosshairs.length > 1 ? (
-            <div className="flex gap-2 overflow-x-auto pb-1" aria-label="准星版本">
+            <div className="filter-scroll flex gap-2 overflow-x-auto pb-1" aria-label="准星版本">
               {profile.crosshairs.map((item) => (
                 <button
                   key={item.id}
@@ -112,7 +112,7 @@ export function ProCrosshairDetailDrawer({
 
           <ProCrosshairPreview settings={version.normalizedSettings} label={`${profile.displayName} ${version.titleZh}`} large />
 
-          <section className="rounded-md border border-white/[0.08] bg-black/25 p-4">
+          <section className="crosshair-code-panel p-4">
             <p className="text-xs text-zinc-500">完整导入代码</p>
             {version.code ? (
               <code className="mt-3 block break-all font-mono text-xs leading-6 text-zinc-300">{version.code}</code>
@@ -122,12 +122,12 @@ export function ProCrosshairDetailDrawer({
             <div className="mt-4"><CopyButton value={version.code} disabled={!copyAvailable} invalidReason={validation.reasons.join("；")} /></div>
           </section>
 
-          <section>
+          <section className="drawer-section">
             <h3 className="text-lg font-semibold text-white">详细参数</h3>
             <SettingsTable settings={version.normalizedSettings} />
           </section>
 
-          <div className="grid gap-6 sm:grid-cols-2">
+          <div className="drawer-section grid gap-7 sm:grid-cols-2">
             <InfoList title="适合人群" items={version.recommendedFor} />
             <InfoList title="优点" items={version.strengths} />
             <InfoList title="可能的缺点" items={version.weaknesses} />
@@ -138,7 +138,7 @@ export function ProCrosshairDetailDrawer({
             </section>
           </div>
 
-          <section className="border-t border-white/10 pt-6">
+          <section className="drawer-section">
             <h3 className="text-sm font-semibold text-white">核实记录与来源</h3>
             <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
               <Meta label="最后核实" value={version.lastVerifiedAt ?? "待核实"} />
@@ -149,7 +149,7 @@ export function ProCrosshairDetailDrawer({
             {version.verificationNotes ? <p className="mt-5 text-sm leading-7 text-zinc-400">{version.verificationNotes}</p> : null}
             <div className="mt-5 grid gap-2">
               {version.sources.map((source) => (
-                <a key={source.url} href={source.url} target="_blank" rel="noopener noreferrer" className="rounded-md border border-white/10 p-3 text-sm text-zinc-400 transition hover:border-white/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50">
+                <a key={source.url} href={source.url} target="_blank" rel="noopener noreferrer" className="border-t border-white/[0.08] px-1 py-3 text-sm text-zinc-400 transition hover:text-white focus-visible:outline focus-visible:outline-1 focus-visible:outline-valorant/70">
                   <span className="block font-medium">{source.title}</span>
                   <span className="mt-1 block text-xs text-zinc-600">{source.sourceType} · 访问 {source.accessedAt}</span>
                 </a>
@@ -219,7 +219,7 @@ function Meta({ label, value }: { label: string; value: string }) {
 
 function ImportInstructions() {
   return (
-    <section className="border-t border-white/10 pt-6">
+    <section className="drawer-section">
       <h3 className="text-sm font-semibold text-white">导入准星代码</h3>
       <ol className="mt-4 grid gap-3 text-sm text-zinc-400 sm:grid-cols-5">
         {["打开 VALORANT 设置", "进入准星", "选择导入配置", "粘贴完整代码", "确认导入"].map((step, index) => (

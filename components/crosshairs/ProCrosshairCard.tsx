@@ -38,27 +38,27 @@ export function ProCrosshairCard({
 
         <div className="mt-4 flex flex-wrap gap-2">
           <VerificationBadge status={version.verificationStatus} />
-          <span className="rounded-full border border-white/10 px-2.5 py-1 text-[11px] text-zinc-500">职业选手</span>
+          <span className="content-tag">职业选手</span>
           {version.versionStatus !== "primary" ? <VersionBadge status={version.versionStatus} /> : null}
         </div>
 
-        <h3 className="mt-4 text-xl font-semibold text-white">{version.titleZh}</h3>
+        <h3 className="mt-4 break-words text-xl font-semibold leading-7 text-white">{version.titleZh}</h3>
         <p className="mt-1 text-xs text-zinc-500">{version.titleEn}</p>
-        <p className="mt-4 text-sm leading-6 text-zinc-400">{version.summaryZh}</p>
+        <p className="mt-4 line-clamp-3 min-h-[4.5rem] text-sm leading-6 text-zinc-400">{version.summaryZh}</p>
 
         <div className="mt-4 flex flex-wrap gap-2">
           {version.styleTags.slice(0, 1).map((tag) => (
-            <span key={tag} className="rounded-full border border-white/10 px-2.5 py-1 text-[11px] text-zinc-500">{tag}</span>
+            <span key={tag} className="content-tag">{tag}</span>
           ))}
         </div>
 
-        <div className="mt-5 min-w-0 rounded-md border border-white/[0.08] bg-black/25 p-3">
+        <div className="crosshair-code-panel mt-auto pt-3">
           <div className="flex items-center justify-between gap-3 text-xs text-zinc-500">
             <span>完整导入代码</span>
             <span>{version.lastVerifiedAt ? `核实 ${version.lastVerifiedAt}` : "日期待核实"}</span>
           </div>
           {version.code ? (
-            <code className="mt-2 block max-w-full overflow-hidden text-ellipsis whitespace-nowrap font-mono text-xs text-zinc-300">{version.code}</code>
+            <code className="mt-2 block max-w-full overflow-hidden text-ellipsis whitespace-nowrap font-mono text-xs text-zinc-300" title={version.code}>{version.code}</code>
           ) : (
             <p className="mt-2 text-sm text-amber-200">暂未找到足够可靠的近期完整代码</p>
           )}
@@ -69,7 +69,7 @@ export function ProCrosshairCard({
               onClick={onDetails}
               aria-label={`查看 ${profile.displayName} 准星详细参数`}
               data-crosshair-detail-trigger={`${profile.playerId}-${version.id}`}
-              className="btn-secondary min-h-11 flex-1 px-3 text-xs"
+              className="btn-ghost min-h-11 flex-1 border border-white/10 px-3 text-xs"
             >
               查看详细参数
             </button>
