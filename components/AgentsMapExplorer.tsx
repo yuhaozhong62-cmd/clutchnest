@@ -89,8 +89,8 @@ export function AgentsMapExplorer() {
   }
 
   return (
-    <>
-      <div className="hidden space-y-6 lg:block">
+    <div className="min-w-0">
+      <div className="hidden space-y-8 lg:block">
         <AgentSelector
           agents={visibleAgents}
           selectedAgent={selectedAgent}
@@ -100,15 +100,17 @@ export function AgentsMapExplorer() {
           onSelect={selectAgent}
         />
 
-        <div className="grid gap-6 lg:grid-cols-[18rem_minmax(0,1fr)]">
-          <aside className="surface-panel self-start p-4">
-            <section>
-              <p className="text-xs text-zinc-600">已选地图</p>
-              <p className="mt-1 text-lg font-semibold text-white">{selectedMap.name}</p>
-              <p className="mt-2 text-xs leading-5 text-zinc-500">{selectedMap.shortDescriptionCn}</p>
-            </section>
+        <MapPool selectedId={mapId} onSelect={selectMap} />
 
-            <SelectionGroup title="点位" separated>
+        <div className="grid items-start gap-6 lg:grid-cols-[16rem_minmax(0,1fr)] xl:grid-cols-[17rem_minmax(0,1fr)]">
+          <aside className="surface-panel min-w-0 p-4 xl:p-5">
+            <div className="border-b border-white/[0.08] pb-4">
+              <p className="text-[11px] font-semibold uppercase text-zinc-600">第三步 · Point</p>
+              <h2 className="mt-2 text-lg font-semibold text-white">选择点位</h2>
+              <p className="mt-2 break-words text-xs leading-5 text-zinc-500">{selectedAgent.name} · {selectedMap.name}</p>
+            </div>
+
+            <SelectionGroup title="可用点位">
               {points.length ? points.map((point) => (
                 <SelectionButton
                   key={point.id}
@@ -122,7 +124,6 @@ export function AgentsMapExplorer() {
           </aside>
 
           <main className="min-w-0 space-y-6">
-            <MapPool selectedId={mapId} onSelect={selectMap} />
             <MapCanvas map={selectedMap} points={points} selectedPoint={selectedPoint} onSelect={selectPoint} />
             {selectedPoint ? (
               <StrategyDetail agent={selectedAgent.name} map={selectedMap.name} point={selectedPoint} />
@@ -131,7 +132,7 @@ export function AgentsMapExplorer() {
         </div>
       </div>
 
-      <div className="space-y-3 lg:hidden">
+      <div className="min-w-0 space-y-3 lg:hidden">
         <MobileSection step="agent" current={mobileStep} number="1" title="选择英雄" onOpen={setMobileStep} summary={selectedAgent.name}>
           <AgentSelector
             agents={visibleAgents}
@@ -167,7 +168,7 @@ export function AgentsMapExplorer() {
               <button
                 type="button"
                 onClick={() => setMobileStep("strategy")}
-                className="mt-4 inline-flex min-h-10 items-center rounded-md border border-white/15 px-4 py-2 text-sm font-semibold text-white transition hover:border-white/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+                className="mt-4 inline-flex min-h-11 items-center rounded-md border border-white/15 px-4 py-2 text-sm font-semibold text-white transition hover:border-white/30 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-valorant/70"
               >
                 查看地图概览
               </button>
@@ -175,7 +176,7 @@ export function AgentsMapExplorer() {
           )}
         </MobileSection>
 
-        <MobileSection step="strategy" current={mobileStep} number="4" title="查看打法" onOpen={setMobileStep}>
+        <MobileSection step="strategy" current={mobileStep} number="4" title="查看打法" onOpen={setMobileStep} summary={selectedPoint?.name ?? `${selectedMap.name} 概览`}>
           <div className="space-y-5">
             <MapCanvas map={selectedMap} points={points} selectedPoint={selectedPoint} onSelect={selectPoint} />
             {selectedPoint ? (
@@ -184,7 +185,7 @@ export function AgentsMapExplorer() {
           </div>
         </MobileSection>
       </div>
-    </>
+    </div>
   );
 }
 
@@ -206,44 +207,50 @@ function AgentSelector({
   compact?: boolean;
 }) {
   return (
-    <section className={compact ? "" : "surface-panel p-5"}>
+    <section className={compact ? "min-w-0" : "border-y border-white/[0.08] py-6"}>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-white">选择英雄</h2>
-          <p className="mt-1 text-xs text-zinc-500">Choose Agent</p>
+          <p className="text-[11px] font-semibold uppercase text-zinc-600">第一步 · Agent</p>
+          <h2 className="mt-2 text-xl font-semibold text-white">选择英雄</h2>
+          <p className="mt-1 text-xs text-zinc-600">Choose Agent</p>
         </div>
         <p className="text-xs text-zinc-500">
           {visibleAgents.length} 位{filter === "sentinel" ? "哨卫英雄" : "英雄"}
         </p>
       </div>
 
-      <div className="mt-4 flex gap-2" aria-label="英雄定位筛选">
+      <div className="mt-4 flex min-w-0 gap-2 overflow-x-auto pb-1" aria-label="英雄定位筛选">
         <FilterButton active={filter === "all"} label="全部" onClick={() => onFilter("all")} />
         <FilterButton active={filter === "sentinel"} label={`哨卫 ${sentinelCount}`} onClick={() => onFilter("sentinel")} />
       </div>
 
-      <div className={`mt-4 grid gap-3 ${compact ? "grid-cols-2 min-[540px]:grid-cols-3" : "grid-cols-3 xl:grid-cols-5"}`}>
+      <div className={`mt-5 grid gap-3 ${compact ? "grid-cols-2 min-[540px]:grid-cols-3" : "grid-cols-5 xl:grid-cols-8"}`}>
         {visibleAgents.map((agent, index) => (
           <AgentCard
             key={agent.id}
             agent={agent}
             active={agent.id === selectedAgent.id}
-            priority={!compact && index < 5}
+            priority={index < (compact ? 6 : 8)}
             onClick={() => onSelect(agent.id)}
           />
         ))}
       </div>
 
-      <div className="mt-4 rounded-md border border-white/[0.08] bg-black/25 p-4">
-        <div className="flex items-center gap-2">
-          <p className="font-semibold text-white">{selectedAgent.name}</p>
-          <span className="text-xs text-zinc-500">{selectedAgent.roleCn}</span>
+      <div className="mt-5 border-l border-valorant/55 pl-4 sm:flex sm:items-start sm:justify-between sm:gap-8">
+        <div className="shrink-0">
+          <p className="text-[11px] text-zinc-600">当前英雄</p>
+          <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1">
+            <p className="font-semibold text-white">{selectedAgent.name}</p>
+            <span className="text-xs text-zinc-500">{selectedAgent.roleCn} · {selectedAgent.roleEn}</span>
+          </div>
         </div>
-        <p className="mt-2 text-sm leading-6 text-zinc-300">{selectedAgent.shortDescriptionCn}</p>
-        <p className="mt-1 text-xs leading-5 text-zinc-600">{selectedAgent.shortDescriptionEn}</p>
+        <div className="mt-3 max-w-2xl sm:mt-0">
+          <p className="text-sm leading-6 text-zinc-300">{selectedAgent.shortDescriptionCn}</p>
+          <p className="mt-1 text-xs leading-5 text-zinc-600">{selectedAgent.shortDescriptionEn}</p>
+        </div>
       </div>
 
-      <p className="mt-4 text-xs leading-5 text-zinc-600">
+      <p className={`${compact ? "mt-5 text-[11px]" : "mt-5 text-xs"} leading-5 text-zinc-600`}>
         英雄名称与角色图像素材归 Riot Games 所有。ClutchNest 是独立的非商业玩家项目，与 Riot Games 无官方关联。
         <span className="mt-1 block text-zinc-700">Agent names and imagery are property of Riot Games. ClutchNest is an independent, non-commercial fan project.</span>
       </p>
@@ -259,7 +266,7 @@ function AgentCard({ agent, active, priority, onClick }: { agent: ValorantAgent;
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className={`group relative min-w-0 overflow-hidden rounded-[10px] border text-left transition duration-150 focus-visible:outline-none ${active ? "border-valorant/55 bg-valorant/[0.06]" : "border-white/10 bg-black/25 hover:border-white/25"}`}
+      className={`group relative min-w-0 overflow-hidden rounded-md border text-left transition duration-150 motion-safe:hover:-translate-y-px focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-valorant/70 ${active ? "border-valorant/55 bg-valorant/[0.055]" : "border-white/10 bg-black/25 hover:border-white/25"}`}
     >
       <div className="relative aspect-[4/5] overflow-hidden border-b border-white/10 bg-zinc-950">
         {agent.portrait && !imageFailed ? (
@@ -274,27 +281,23 @@ function AgentCard({ agent, active, priority, onClick }: { agent: ValorantAgent;
             onError={() => setImageFailed(true)}
           />
         ) : <AgentImagePlaceholder agent={agent} />}
-        {active ? (
-          <span className="absolute right-2 top-2 rounded-sm border border-white/20 bg-black/85 px-2 py-1 text-[10px] font-semibold text-white">
-            已选择
-          </span>
-        ) : null}
+        {active ? <span className="absolute left-2 top-2 rounded-sm border border-valorant/40 bg-black/85 px-2 py-1 text-[10px] font-semibold text-zinc-200">当前</span> : null}
       </div>
       <div className="p-3">
         <span className="block truncate text-sm font-semibold text-white">{agent.name}</span>
-        <span className="mt-1 block text-xs text-zinc-500">{agent.roleCn}</span>
+        <span className="mt-1 block truncate text-xs text-zinc-500">{agent.roleCn} · {agent.roleEn}</span>
       </div>
-      {active ? <span className="absolute inset-x-0 bottom-0 h-0.5 bg-valorant" /> : null}
+      {active ? <span className="absolute inset-y-0 left-0 w-px bg-valorant" /> : null}
     </button>
   );
 }
 
 function AgentImagePlaceholder({ agent }: { agent: ValorantAgent }) {
   return (
-    <div className="grid h-full w-full place-items-center bg-zinc-950 text-center">
+    <div className="grid-surface grid h-full w-full place-items-center bg-zinc-950 px-2 text-center">
       <span>
-        <span className="block text-2xl font-black text-zinc-600">{agent.name.slice(0, 2).toUpperCase()}</span>
-        <span className="mt-2 block text-xs text-zinc-500">{agent.roleCn}</span>
+        <span className="block text-xl font-black text-zinc-500 sm:text-2xl">{agent.name.slice(0, 2).toUpperCase()}</span>
+        <span className="mt-2 block text-[10px] leading-4 text-zinc-600">本地角色图待补充</span>
       </span>
     </div>
   );
@@ -306,7 +309,7 @@ function FilterButton({ active, label, onClick }: { active: boolean; label: stri
       type="button"
       aria-pressed={active}
       onClick={onClick}
-      className="filter-pill min-h-9 px-3 py-2 text-xs font-semibold focus-visible:outline-none"
+      className={`min-h-11 shrink-0 rounded-md border px-4 py-2 text-xs font-semibold transition focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-valorant/70 ${active ? "border-valorant/45 bg-valorant/[0.08] text-white" : "border-white/10 text-zinc-400 hover:border-white/25 hover:text-white"}`}
     >
       {label}
     </button>
@@ -314,23 +317,37 @@ function FilterButton({ active, label, onClick }: { active: boolean; label: stri
 }
 
 function MapPool({ selectedId, onSelect, compact = false }: { selectedId: string; onSelect: (id: string) => void; compact?: boolean }) {
+  const rotationPatch = maps[0]?.rotationPatch;
+  const latestVerification = maps.reduce((latest, map) => map.verifiedAt > latest ? map.verifiedAt : latest, "");
+
   return (
-    <section className={compact ? "" : "surface-panel p-5"}>
+    <section className={compact ? "min-w-0" : "border-y border-white/[0.08] py-6"}>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-white">本赛季地图池</h2>
-          <p className="mt-1 text-xs text-zinc-500">V26 Act 4 · Patch 13.00</p>
+          <p className="text-[11px] font-semibold uppercase text-zinc-600">第二步 · Map</p>
+          <h2 className="mt-2 text-xl font-semibold text-white">本赛季地图池</h2>
+          <p className="mt-1 text-xs text-zinc-600">Current Competitive Map Pool{rotationPatch ? ` · Patch ${rotationPatch}` : ""}</p>
         </div>
-        <p className="text-xs text-zinc-600">核验于 2026-07-12</p>
+        <p className="text-xs text-zinc-600">{maps.length} 张地图{latestVerification ? ` · 核验于 ${latestVerification}` : ""}</p>
       </div>
 
-      <div className={`mt-5 grid gap-3 ${compact ? "grid-cols-1 min-[520px]:grid-cols-2" : "md:grid-cols-2 xl:grid-cols-3"}`}>
-        {maps.map((map, index) => (
-          <MapCard key={map.id} map={map} active={map.id === selectedId} priority={!compact && index < 3} onClick={() => onSelect(map.id)} />
-        ))}
-      </div>
+      {compact ? (
+        <div className="filter-scroll -mx-4 mt-5 overflow-x-auto px-4 pb-2">
+          <div className="flex w-max max-w-none gap-3">
+            {maps.map((map) => (
+              <MapCard key={map.id} map={map} active={map.id === selectedId} priority={false} compact onClick={() => onSelect(map.id)} />
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="mt-5 grid grid-cols-3 gap-3 xl:grid-cols-4">
+          {maps.map((map, index) => (
+            <MapCard key={map.id} map={map} active={map.id === selectedId} priority={index < 4} onClick={() => onSelect(map.id)} />
+          ))}
+        </div>
+      )}
 
-      <div className="mt-5 border-l-2 border-valorant pl-4 text-xs leading-6 text-zinc-500">
+      <div className="mt-5 border-l border-valorant/55 pl-4 text-xs leading-6 text-zinc-500">
         <p>地图池可能随游戏版本更新而变化。</p>
         <p>ClutchNest 会根据 Riot 官方补丁说明进行核验。</p>
       </div>
@@ -338,7 +355,7 @@ function MapPool({ selectedId, onSelect, compact = false }: { selectedId: string
   );
 }
 
-function MapCard({ map, active, priority, onClick }: { map: ValorantMap; active: boolean; priority: boolean; onClick: () => void }) {
+function MapCard({ map, active, priority, compact = false, onClick }: { map: ValorantMap; active: boolean; priority: boolean; compact?: boolean; onClick: () => void }) {
   const [imageFailed, setImageFailed] = useState(false);
 
   return (
@@ -346,7 +363,7 @@ function MapCard({ map, active, priority, onClick }: { map: ValorantMap; active:
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className={`group min-w-0 overflow-hidden rounded-[10px] border text-left transition duration-150 focus-visible:outline-none ${active ? "border-valorant/55 bg-valorant/[0.06]" : "border-white/10 bg-black/25 hover:border-white/25"}`}
+      className={`group relative flex min-w-0 flex-col overflow-hidden rounded-md border text-left transition duration-150 motion-safe:hover:-translate-y-px focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-valorant/70 ${compact ? "w-[calc(100vw-4.5rem)] max-w-[17rem] shrink-0" : "h-full"} ${active ? "border-valorant/55 bg-valorant/[0.055]" : "border-white/10 bg-black/25 hover:border-white/25"}`}
     >
       <div className="relative aspect-video overflow-hidden border-b border-white/10 bg-zinc-950">
         {map.coverImage && !imageFailed ? (
@@ -360,27 +377,33 @@ function MapCard({ map, active, priority, onClick }: { map: ValorantMap; active:
             onError={() => setImageFailed(true)}
           />
         ) : <MapImagePlaceholder name={map.name} />}
-        {active ? <span className="absolute inset-x-0 bottom-0 h-0.5 bg-valorant" /> : null}
       </div>
-      <div className="p-4">
+      <div className="flex flex-1 flex-col p-4">
         <div className="flex items-center justify-between gap-3">
           <span className="text-base font-semibold text-white">{map.name}</span>
           <span className="shrink-0 text-xs text-zinc-500">{map.sites} 个据点</span>
         </div>
-        <span className="mt-2 block min-h-10 text-xs leading-5 text-zinc-500">{map.shortDescriptionCn}</span>
+        <span className="mt-2 block text-xs leading-5 text-zinc-400">{map.shortDescriptionCn}</span>
+        <span className="mt-1 block text-[11px] leading-5 text-zinc-600">{map.shortDescriptionEn}</span>
       </div>
+      {active ? <span className="absolute inset-y-0 left-0 w-px bg-valorant" /> : null}
     </button>
   );
 }
 
-function SelectionGroup({ title, children, separated = false }: { title: string; children: ReactNode; separated?: boolean }) {
-  return <section className={separated ? "mt-5 border-t border-white/10 pt-5" : ""}><h2 className="mb-3 text-sm font-semibold text-white">{title}</h2><div className="space-y-2">{children}</div></section>;
+function SelectionGroup({ title, children }: { title: string; children: ReactNode }) {
+  return <section className="mt-4"><h3 className="mb-3 text-xs font-semibold text-zinc-500">{title}</h3><div className="space-y-2">{children}</div></section>;
 }
 
 function SelectionButton({ active, title, onClick }: { active: boolean; title: string; onClick: () => void }) {
   return (
-    <button type="button" aria-pressed={active} onClick={onClick} className="filter-pill w-full p-3 text-left focus-visible:outline-none">
-      <span className="block text-sm font-semibold">{title}</span>
+    <button
+      type="button"
+      aria-pressed={active}
+      onClick={onClick}
+      className={`flex min-h-11 w-full min-w-0 items-center rounded-md border px-3 py-2.5 text-left text-sm font-semibold transition focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-valorant/70 ${active ? "border-valorant/45 bg-valorant/[0.08] text-white" : "border-white/10 text-zinc-400 hover:border-white/25 hover:text-white"}`}
+    >
+      <span className="block min-w-0 break-words">{title}</span>
     </button>
   );
 }
@@ -388,13 +411,13 @@ function SelectionButton({ active, title, onClick }: { active: boolean; title: s
 function MobileSection({ step, current, number, title, summary, onOpen, children }: { step: MobileStep; current: MobileStep; number: string; title: string; summary?: string; onOpen: (step: MobileStep) => void; children: ReactNode }) {
   const active = step === current;
   return (
-    <section className="surface-panel">
-      <button type="button" onClick={() => onOpen(step)} aria-expanded={active} className="flex w-full items-center gap-3 p-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/40">
-        <span className={`grid h-7 w-7 place-items-center rounded-full border text-xs ${active ? "border-valorant/60 bg-valorant/15 text-white" : "border-white/15 text-zinc-500"}`}>{number}</span>
-        <span className="font-semibold text-white">{title}</span>
-        {!active && summary ? <span className="ml-auto truncate text-xs text-zinc-500">{summary}</span> : null}
+    <section className={`surface-panel min-w-0 overflow-hidden transition-colors ${active ? "border-white/15" : "border-white/[0.08]"}`}>
+      <button type="button" onClick={() => onOpen(step)} aria-expanded={active} className="flex min-h-16 w-full min-w-0 items-center gap-3 px-4 py-3 text-left focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-[-1px] focus-visible:outline-valorant/70">
+        <span className={`grid h-7 w-7 shrink-0 place-items-center rounded-full border font-mono text-xs ${active ? "border-valorant/55 bg-valorant/[0.1] text-white" : "border-white/15 text-zinc-500"}`}>{number}</span>
+        <span className="shrink-0 font-semibold text-white">{title}</span>
+        {!active && summary ? <span className="ml-auto min-w-0 truncate text-right text-xs text-zinc-500">{summary}</span> : null}
       </button>
-      {active ? <div className="border-t border-white/10 p-4">{children}</div> : null}
+      {active ? <div className="min-w-0 border-t border-white/[0.08] p-4">{children}</div> : null}
     </section>
   );
 }
@@ -403,32 +426,34 @@ function MapCanvas({ map, points, selectedPoint, onSelect }: { map: ValorantMap;
   const [imageFailed, setImageFailed] = useState(false);
 
   return (
-    <section className="relative min-h-[340px] overflow-hidden rounded-[14px] border border-white/10 bg-black sm:min-h-[540px]">
+    <section className="relative aspect-square w-full min-w-0 overflow-hidden rounded-lg border border-white/10 bg-black">
       {map.overviewImage && !imageFailed ? (
         <Image
           src={map.overviewImage}
           alt={`${map.name} 官方地图俯视图`}
           fill
-          sizes="(max-width: 1023px) calc(100vw - 74px), 850px"
-          className="object-contain p-5 opacity-80 sm:p-8"
+          sizes="(max-width: 1023px) calc(100vw - 72px), (max-width: 1279px) calc(100vw - 22rem), 850px"
+          className="object-cover opacity-80"
           onError={() => setImageFailed(true)}
         />
       ) : <div className="absolute inset-0 grid-surface"><MapImagePlaceholder name={map.name} /></div>}
-      <div className="absolute left-4 top-4 rounded-md border border-white/10 bg-black/85 px-3 py-2 backdrop-blur-sm">
-        <p className="text-xs text-zinc-500">当前地图</p>
-        <h2 className="mt-1 text-xl font-semibold text-white">{map.name}</h2>
+      <div className="absolute left-3 top-3 rounded-md border border-white/10 bg-black/85 px-3 py-2 sm:left-4 sm:top-4">
+        <p className="text-[10px] text-zinc-500">当前地图 · {points.length} 个点位</p>
+        <h2 className="mt-1 text-base font-semibold text-white sm:text-xl">{map.name}</h2>
       </div>
       {points.map((point) => (
         <button
           key={point.id}
           type="button"
           onClick={() => onSelect(point)}
-          aria-label={point.name}
+          aria-label={`查看点位：${point.name}`}
           aria-pressed={selectedPoint?.id === point.id}
-          className={`absolute h-9 w-9 -translate-x-1/2 -translate-y-1/2 rounded-full border transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${selectedPoint?.id === point.id ? "border-white bg-valorant" : "border-valorant bg-black hover:bg-valorant"}`}
+          className="group absolute grid h-11 w-11 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-white"
           style={{ left: `${point.position.x}%`, top: `${point.position.y}%` }}
         >
-          <span className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white" />
+          <span className={`grid h-7 w-7 place-items-center rounded-full border transition ${selectedPoint?.id === point.id ? "border-white bg-valorant" : "border-valorant/80 bg-black/90 group-hover:border-white/70"}`}>
+            <span className="h-1.5 w-1.5 rounded-full bg-white" />
+          </span>
         </button>
       ))}
     </section>
@@ -436,12 +461,12 @@ function MapCanvas({ map, points, selectedPoint, onSelect }: { map: ValorantMap;
 }
 
 function MapImagePlaceholder({ name }: { name: string }) {
-  return <div className="grid h-full w-full place-items-center bg-zinc-950 px-4 text-center"><span className="text-sm font-semibold text-zinc-500">{name}<span className="mt-1 block text-xs font-normal text-zinc-700">地图图像暂不可用</span></span></div>;
+  return <div className="grid h-full w-full place-items-center bg-zinc-950 px-4 text-center"><span><span className="block font-mono text-lg font-semibold text-zinc-500">{name.toUpperCase()}</span><span className="mt-2 block text-xs font-normal text-zinc-700">地图图像暂不可用</span></span></div>;
 }
 
 function EmptyPoints() {
   return (
-    <div className="rounded-md border border-dashed border-white/10 p-4 text-xs leading-6 text-zinc-600">
+    <div className="border-l border-dashed border-white/15 pl-3 text-xs leading-6 text-zinc-600">
       <p>这个英雄在这张地图上暂时还没有攻略。</p>
       <p className="mt-2">HAO 会在实战测试后逐步加入点位、守点思路与技能用法。</p>
     </div>
@@ -450,7 +475,7 @@ function EmptyPoints() {
 
 function EmptyStrategy({ agent, map }: { agent: string; map: string }) {
   return (
-    <article className="surface-panel p-5 sm:p-7">
+    <article className="border-y border-white/[0.08] py-6 sm:py-8">
       <p className="text-sm text-zinc-500">{agent} · {map}</p>
       <h2 className="mt-3 text-xl font-semibold text-white">这个英雄在这张地图上暂时还没有攻略。</h2>
       <p className="mt-3 text-sm leading-7 text-zinc-500">HAO 会在实战测试后逐步加入点位、守点思路与技能用法。</p>
@@ -460,12 +485,13 @@ function EmptyStrategy({ agent, map }: { agent: string; map: string }) {
 
 function TacticalGuideLink({ href }: { href: string }) {
   return (
-    <Link href={href} className="mt-4 flex min-h-11 w-full items-center justify-between rounded-md border border-valorant/50 bg-valorant/[0.08] px-4 py-3 text-sm font-semibold text-white transition hover:border-valorant hover:bg-valorant/[0.13] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40">
+    <Link href={href} className="group mt-5 flex min-h-11 w-full items-center justify-between border-y border-valorant/30 py-4 text-sm font-semibold text-white transition hover:border-valorant/60 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-valorant/70">
       <span>
-        <span className="block">查看保安 × 空岛完整攻略</span>
-        <span className="mt-1 block text-[10px] font-normal text-zinc-500">Cypher × Ascent Tactical Guide</span>
+        <span className="block text-[10px] font-semibold uppercase text-valorant/80">深度专题</span>
+        <span className="mt-2 block">查看保安 × 空岛完整攻略</span>
+        <span className="mt-1 block text-[10px] font-normal leading-4 text-zinc-500">Cypher × Ascent Tactical Guide · 精确点位仍需实机验证</span>
       </span>
-      <span aria-hidden="true">→</span>
+      <span aria-hidden="true" className="ml-3 text-zinc-500 transition group-hover:translate-x-px group-hover:text-white">→</span>
     </Link>
   );
 }
@@ -473,25 +499,28 @@ function TacticalGuideLink({ href }: { href: string }) {
 function StrategyDetail({ agent, map, point }: { agent: string; map: string; point: LineupPoint }) {
   return (
     <article className="surface-panel p-5 sm:p-7">
-      <p className="text-sm text-zinc-500">{agent} · {map} · {point.name}</p>
-      <h2 className="mt-3 text-2xl font-semibold text-white">{point.name}</h2>
-      <div className="mt-6 grid min-h-36 place-items-center rounded-md border border-white/10 bg-black/50 px-5 text-center text-sm text-zinc-500 grid-surface">{point.screenshotLabel}</div>
-      <div className="mt-8 grid gap-8 md:grid-cols-2">
+      <p className="text-xs text-zinc-500">{agent} · {map}</p>
+      <h2 className="mt-3 break-words text-2xl font-semibold text-white">{point.name}</h2>
+      <p className="mt-2 text-xs text-zinc-600">实战用途与点位分析</p>
+      <div className="mt-6 grid aspect-[16/7] min-h-36 place-items-center rounded-md border border-white/10 bg-black/50 px-5 text-center text-sm text-zinc-500 grid-surface">{point.screenshotLabel}</div>
+      <div className="mt-8 divide-y divide-white/[0.08] border-t border-white/[0.08]">
         <DetailBlock title="打法说明" content={point.play} />
-        <DetailBlock title="个人思路" content={point.thinking} />
-        <DetailList title="技巧" items={point.tips} />
-        <DetailBlock title="适合情况" content={point.bestFor} />
-        <DetailList title="优点" items={point.pros} />
-        <DetailList title="缺点" items={point.cons} muted />
+        <DetailBlock title="HAO 的个人思路" content={point.thinking} emphasis />
+        <div className="grid gap-x-8 md:grid-cols-2">
+          <DetailList title="技巧" items={point.tips} />
+          <DetailBlock title="适合情况" content={point.bestFor} />
+          <DetailList title="优点" items={point.pros} />
+          <DetailList title="缺点" items={point.cons} muted />
+        </div>
       </div>
     </article>
   );
 }
 
-function DetailBlock({ title, content }: { title: string; content: string }) {
-  return <section><h3 className="text-sm font-semibold text-white">{title}</h3><p className="mt-2 text-sm leading-7 text-zinc-400">{content}</p></section>;
+function DetailBlock({ title, content, emphasis = false }: { title: string; content: string; emphasis?: boolean }) {
+  return <section className={`py-6 ${emphasis ? "border-l border-valorant/45 pl-4" : ""}`}><h3 className="text-sm font-semibold text-white">{title}</h3><p className={`mt-2 text-sm leading-7 ${emphasis ? "text-zinc-300" : "text-zinc-400"}`}>{content}</p></section>;
 }
 
 function DetailList({ title, items, muted = false }: { title: string; items: string[]; muted?: boolean }) {
-  return <section><h3 className="text-sm font-semibold text-white">{title}</h3><ul className="mt-3 space-y-2">{items.map((item) => <li key={item} className={`text-sm leading-6 ${muted ? "text-zinc-500" : "text-zinc-400"}`}>{item}</li>)}</ul></section>;
+  return <section className="py-6"><h3 className="text-sm font-semibold text-white">{title}</h3><ul className="mt-3 space-y-2">{items.map((item) => <li key={item} className={`relative pl-3 text-sm leading-6 before:absolute before:left-0 before:top-[0.7rem] before:h-1 before:w-1 before:rounded-full before:bg-zinc-700 ${muted ? "text-zinc-500" : "text-zinc-400"}`}>{item}</li>)}</ul></section>;
 }
