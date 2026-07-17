@@ -206,6 +206,48 @@ textarea {
     background: var(--accent-muted);
     color: var(--text-primary);
   }
+
+  .crosshair-library .filter-pill {
+    min-height: 2.75rem;
+  }
+
+  .crosshair-library .filter-pill:focus-visible {
+    outline: 1px solid rgba(228, 81, 96, 0.72);
+    outline-offset: 2px;
+  }
+
+  .content-tag {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--border-default);
+    border-radius: 999px;
+    padding: 0.25rem 0.625rem;
+    color: var(--text-muted);
+    font-size: 0.6875rem;
+    line-height: 1.25rem;
+  }
+
+  .crosshair-code-panel {
+    min-width: 0;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-small);
+    background: rgba(0, 0, 0, 0.24);
+    padding: 0.875rem;
+  }
+
+  .drawer-section {
+    border-top: 1px solid var(--border-subtle);
+    padding-top: 1.5rem;
+  }
+
+  .filter-scroll {
+    scrollbar-width: none;
+    overscroll-behavior-inline: contain;
+  }
+
+  .filter-scroll::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @media (min-width: 640px) {

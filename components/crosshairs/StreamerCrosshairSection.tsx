@@ -32,14 +32,52 @@ export function StreamerCrosshairSection({ searchQuery }: { searchQuery: string 
   const detailVersion = detailProfile?.crosshairs.find((version) => version.id === crosshairId);
   function closeDetails() { const trigger = detailProfile && detailVersion ? document.querySelector<HTMLElement>(`[data-streamer-detail-trigger="${detailProfile.streamerId}-${detailVersion.id}"]`) : null; updateQuery({ crosshair: undefined }, true); window.requestAnimationFrame(() => trigger?.focus()); }
   return (
-    <section className="mt-16 border-t border-white/[0.08] pt-12">
-      <div className="max-w-3xl"><p className="text-xs font-semibold text-valorant">高分主播公开设置</p><h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl">全球高分主播准星</h2><p className="mt-4 text-base leading-7 text-zinc-300">收录亚服、欧服和美服高分 VALORANT 主播近期公开、可验证的准星设置。</p></div>
+    <section className="mt-20 border-t border-white/[0.08] pt-12 sm:pt-14">
+      <div className="max-w-3xl">
+        <p className="text-xs font-semibold text-valorant">高分主播公开设置</p>
+        <h2 className="mt-3 text-3xl font-semibold leading-tight text-white">全球高分主播准星</h2>
+        <p className="mt-4 text-base leading-7 text-zinc-300">收录亚服、欧服和美服高分 VALORANT 主播近期公开、可验证的准星设置。</p>
+      </div>
       <p className="mt-5 text-xs leading-6 text-zinc-500">共 {streamerRegionCounts.all} 位主播 · 亚服 {streamerRegionCounts["asia-pacific"]} · 欧服 {streamerRegionCounts.europe} · 美服 {streamerRegionCounts["north-america"]}。主播可能随时更改准星，计划每 30 天复核一次。</p>
-      <div className="mt-8 border-y border-white/[0.08] py-4"><div className="flex gap-2 overflow-x-auto pb-1" aria-label="主播地区筛选">{regions.map((item) => <button key={item.id} type="button" aria-pressed={region === item.id} onClick={() => updateQuery({ region: item.id, streamer: undefined, crosshair: undefined })} className="filter-pill shrink-0 px-3 text-sm">{item.label} <span className="text-zinc-500">{streamerRegionCounts[item.id]}</span></button>)}</div></div>
-      <div className="mt-5 flex gap-2 overflow-x-auto pb-1" aria-label="主播筛选"><button type="button" aria-pressed={streamer === "all"} onClick={() => updateQuery({ streamer: undefined, crosshair: undefined })} className="filter-pill min-h-12 shrink-0 px-4 text-sm">全部主播</button>{regionProfiles.map((item) => <button key={item.streamerId} type="button" aria-pressed={streamer === item.streamerId} onClick={() => updateQuery({ streamer: item.streamerId, crosshair: undefined })} className="filter-pill min-h-12 shrink-0 px-4 text-left"><span className="block font-semibold text-white">{item.displayName}</span><span className="block text-[10px] text-zinc-500">{streamerRegionLabels[item.region].zh}</span></button>)}</div>
-      <div className="mt-8 grid gap-5 lg:grid-cols-2">{visible.flatMap((profile) => profile.crosshairs.map((version) => <StreamerCrosshairCard key={`${profile.streamerId}-${version.id}`} profile={profile} version={version} onDetails={() => updateQuery({ streamer: profile.streamerId, crosshair: version.id })} />))}</div>
+
+      <div className="mt-8 border-y border-white/[0.08] py-4">
+        <p className="mb-3 text-xs font-medium text-zinc-400">地区</p>
+        <div className="filter-scroll -mx-1 flex gap-2 overflow-x-auto px-1 pb-2" aria-label="主播地区筛选">
+          {regions.map((item) => (
+            <button key={item.id} type="button" aria-pressed={region === item.id} onClick={() => updateQuery({ region: item.id, streamer: undefined, crosshair: undefined })} className="filter-pill shrink-0 px-3.5 text-sm focus-visible:outline-none">
+              {item.label} <span className="ml-1 text-zinc-500">{streamerRegionCounts[item.id]}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-5">
+        <p className="mb-2 text-xs text-zinc-600">主播</p>
+        <div className="filter-scroll -mx-1 flex gap-1 overflow-x-auto px-1 pb-2" aria-label="主播筛选">
+          <StreamerTab label="全部主播" detail={`${regionProfiles.length} 位`} active={streamer === "all"} onClick={() => updateQuery({ streamer: undefined, crosshair: undefined })} />
+          {regionProfiles.map((item) => (
+            <StreamerTab key={item.streamerId} label={item.displayName} detail={streamerRegionLabels[item.region].zh} active={streamer === item.streamerId} onClick={() => updateQuery({ streamer: item.streamerId, crosshair: undefined })} />
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-8 grid items-stretch gap-5 lg:grid-cols-2">{visible.flatMap((profile) => profile.crosshairs.map((version) => <StreamerCrosshairCard key={`${profile.streamerId}-${version.id}`} profile={profile} version={version} onDetails={() => updateQuery({ streamer: profile.streamerId, crosshair: version.id })} />))}</div>
       {!visible.length ? <div className="mt-8 border border-dashed border-white/15 px-5 py-12 text-center text-sm text-zinc-500">没有找到符合当前地区、主播或关键词的准星。</div> : null}
       {detailProfile && detailVersion ? <StreamerCrosshairDetailDrawer profile={detailProfile} version={detailVersion} onClose={closeDetails} /> : null}
     </section>
+  );
+}
+
+function StreamerTab({ label, detail, active, onClick }: { label: string; detail: string; active: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      aria-pressed={active}
+      onClick={onClick}
+      className={`min-h-11 shrink-0 rounded-md border px-3 text-left transition focus-visible:outline focus-visible:outline-1 focus-visible:outline-valorant/70 ${active ? "border-white/20 bg-white/[0.045] text-white" : "border-transparent text-zinc-400 hover:border-white/10 hover:text-white"}`}
+    >
+      <span className="block text-sm font-medium">{label}</span>
+      <span className="block text-[10px] text-zinc-600">{detail}</span>
+    </button>
   );
 }

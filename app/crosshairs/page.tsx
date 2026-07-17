@@ -4,6 +4,8 @@ import { CrosshairLibrary } from "@/components/CrosshairLibrary";
 import { edgCurrentRosterProfiles } from "@/lib/data/crosshairTeams/edg";
 import { xlgCurrentRosterProfiles } from "@/lib/data/crosshairTeams/xlg";
 import { prxCurrentRosterProfiles } from "@/lib/data/crosshairTeams/prx";
+import { streamerProfiles } from "@/lib/data/crosshairStreamers";
+import { publishedCrosshairs } from "@/lib/data/crosshairs";
 
 type CrosshairsPageProps = {
   searchParams: Promise<{ team?: string | string[]; type?: string | string[] }>;
@@ -45,16 +47,26 @@ export async function generateMetadata({ searchParams }: CrosshairsPageProps): P
 }
 
 export default function CrosshairsPage() {
+  const haoTestedCount = publishedCrosshairs.filter((crosshair) => crosshair.contentType === "hao-tested").length;
+  const currentRosterCount = edgCurrentRosterProfiles.length + xlgCurrentRosterProfiles.length + prxCurrentRosterProfiles.length;
+
   return (
     <div className="site-container page-shell">
-      <div className="page-header">
+      <div className="page-header pb-10 sm:pb-12">
         <h1 className="page-title">准星库</h1>
         <p className="mt-2 page-kicker">Crosshair Library</p>
-        <p className="mt-5 page-lead">
+        <p className="mt-5 max-w-[42rem] page-lead">
           这里会收集 HAO 实测准星与最近核验的职业选手公开设置，包括使用分析、适合人群、优点和缺点。
         </p>
         <p className="mt-2 support-copy">
           HAO-tested crosshairs and recently verified professional references with practical analysis.
+        </p>
+        <p className="mt-7 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-zinc-500" aria-label={`${haoTestedCount} 条 HAO 实测，${currentRosterCount} 位现役选手，${streamerProfiles.length} 位高分主播`}>
+          <span>{haoTestedCount} 条 HAO 实测</span>
+          <span aria-hidden="true" className="text-zinc-700">·</span>
+          <span>{currentRosterCount} 位现役选手</span>
+          <span aria-hidden="true" className="text-zinc-700">·</span>
+          <span>{streamerProfiles.length} 位高分主播</span>
         </p>
       </div>
       <Suspense fallback={<div className="mt-10 min-h-64 border-y border-white/10 py-10 text-sm text-zinc-600">正在载入准星数据…</div>}>

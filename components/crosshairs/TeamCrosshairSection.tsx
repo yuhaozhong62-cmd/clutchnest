@@ -116,18 +116,18 @@ export function TeamCrosshairSection({
   }
 
   return (
-    <section id={`${team.id}-crosshairs`} className="mt-16 scroll-mt-24 border-t border-white/[0.08] pt-12">
+    <section id={`${team.id}-crosshairs`} className="mt-20 scroll-mt-24 border-t border-white/[0.08] pt-12 sm:pt-14">
       <div className="max-w-3xl">
-          <div className="flex items-center gap-3">
-            <span className="grid h-10 w-10 place-items-center border border-white/20 bg-white text-xs font-black text-black">{team.shortName}</span>
-            <span className="rounded-full border border-valorant/30 px-3 py-1 text-xs font-semibold text-valorant">现役阵容</span>
-          </div>
-          <h2 className="mt-5 text-3xl font-semibold text-white sm:text-4xl">{team.titleZh}</h2>
-          <p className="mt-2 text-sm text-zinc-500">{team.titleEn}</p>
-          <p className="mt-4 text-base leading-7 text-zinc-300">{team.descriptionZh}</p>
-          <p className="mt-2 text-sm leading-6 text-zinc-500">{team.contextZh}</p>
+        <div className="flex items-center gap-3">
+          <span className="grid h-10 w-10 place-items-center rounded-md border border-white/15 bg-white/[0.04] text-xs font-black text-white">{team.shortName}</span>
+          <span className="content-tag border-valorant/30 text-valorant">现役阵容</span>
+        </div>
+        <h2 className="mt-5 text-3xl font-semibold leading-tight text-white">{team.titleZh}</h2>
+        <p className="mt-2 text-xs text-zinc-500">{team.titleEn}</p>
+        <p className="mt-4 text-base leading-7 text-zinc-300">{team.descriptionZh}</p>
+        <p className="mt-2 text-sm leading-6 text-zinc-500">{team.contextZh}</p>
       </div>
-      <p className="mt-6 flex flex-wrap gap-x-3 gap-y-1 border-y border-white/[0.08] py-4 text-sm text-zinc-400">
+      <p className="mt-6 flex flex-wrap gap-x-3 gap-y-1 border-y border-white/[0.08] py-3.5 text-xs text-zinc-500">
         <span>{currentProfiles.length} 位现役选手</span><span aria-hidden="true" className="text-zinc-700">·</span>
         <span>{counts.verified} 条已验证</span><span aria-hidden="true" className="text-zinc-700">·</span>
         <span>{counts.likely} 条较可信</span><span aria-hidden="true" className="text-zinc-700">·</span>
@@ -135,7 +135,7 @@ export function TeamCrosshairSection({
       </p>
       <p className="mt-3 text-xs leading-6 text-zinc-500">{team.rosterNoteZh}{counts.pending ? ` · ${counts.pending} 条待核实` : ""}{counts.history ? ` · ${counts.history} 条历史版本` : ""}</p>
 
-      <div className="mt-8 overflow-x-auto border-y border-white/[0.08] py-4" aria-label={`${team.shortName} 选手筛选`}>
+      <div className="filter-scroll mt-7 overflow-x-auto border-b border-white/[0.08] pb-4" aria-label={`${team.shortName} 选手筛选`}>
         <div className="flex min-w-max gap-2">
           <PlayerTab label="全部" subLabel={`${currentProfiles.length} 人`} active={selectedPlayer === "all"} onClick={() => updateQuery({ player: undefined, crosshair: undefined })} />
           {currentProfiles.map((profile) => (
@@ -160,14 +160,14 @@ export function TeamCrosshairSection({
         </div>
       </div>
 
-      <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-5 grid gap-3 border-b border-white/[0.08] pb-6 sm:grid-cols-2 lg:grid-cols-4">
         <FilterSelect label="准星类型" value={typeFilter} options={typeOptions.map((value) => ({ value, label: value }))} onChange={(value) => updateQuery({ type: value, crosshair: undefined })} />
         <FilterSelect label="颜色" value={colorFilter} options={colorOptions.map((value) => ({ value, label: value }))} onChange={(value) => updateQuery({ color: value, crosshair: undefined })} />
         <FilterSelect label="数据状态" value={dataStatus} options={statusOptions} onChange={(value) => updateQuery({ status: value, crosshair: undefined })} />
         <FilterSelect label="排序" value={sort} options={sortOptions} onChange={(value) => updateQuery({ sort: value, crosshair: undefined })} />
       </div>
 
-      <div className="mt-8 grid gap-5 lg:grid-cols-2">
+      <div className="mt-8 grid items-stretch gap-5 lg:grid-cols-2">
         {visibleCards.map(({ profile, version }) => (
           <ProCrosshairCard key={`${profile.playerId}-${version.id}`} profile={profile} version={version} onDetails={() => openDetails(profile, version)} />
         ))}
@@ -240,7 +240,7 @@ function getStatusCounts(profiles: ProPlayerCrosshairProfile[]) {
 
 function PlayerTab({ label, subLabel, active, muted = false, onClick }: { label: string; subLabel: string; active: boolean; muted?: boolean; onClick: () => void }) {
   return (
-    <button type="button" aria-label={`${label}，${subLabel}`} onClick={onClick} aria-pressed={active} className="filter-pill min-h-14 px-4 text-left focus-visible:outline-none">
+    <button type="button" aria-label={`${label}，${subLabel}`} onClick={onClick} aria-pressed={active} className="filter-pill min-h-[3.25rem] px-4 text-left focus-visible:outline-none">
       <span className={`block text-sm font-semibold ${muted && !active ? "text-zinc-500" : "text-white"}`}>{label}</span>
       <span className="mt-0.5 block text-[11px] text-zinc-500">{subLabel}</span>
     </button>
@@ -251,7 +251,7 @@ function FilterSelect({ label, value, options, onChange }: { label: string; valu
   return (
     <label className="block">
       <span className="mb-2 block text-xs text-zinc-600">{label}</span>
-      <select value={value} onChange={(event) => onChange(event.target.value)} className="min-h-11 w-full rounded-md border border-white/10 bg-panel px-3 text-sm text-zinc-300 outline-none transition hover:border-white/25 focus:border-white/40 focus:ring-2 focus:ring-white/20">
+      <select value={value} onChange={(event) => onChange(event.target.value)} className="min-h-11 w-full rounded-md border border-white/10 bg-panel px-3 text-sm text-zinc-300 outline-none transition hover:border-white/20 focus:border-valorant/45 focus:ring-1 focus:ring-valorant/25">
         {options.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
       </select>
     </label>
