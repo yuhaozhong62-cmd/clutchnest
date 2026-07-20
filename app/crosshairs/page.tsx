@@ -12,6 +12,17 @@ type CrosshairsPageProps = {
 };
 
 export async function generateMetadata({ searchParams }: CrosshairsPageProps): Promise<Metadata> {
+  if (process.env.CLUTCHNEST_STATIC_EXPORT === "1") {
+    const title = "Valorant 准星库";
+    const description = "浏览 HAO 实测准星与近期核验的职业选手 VALORANT 准星代码、参数和原创预览。";
+    return {
+      title,
+      description,
+      alternates: { canonical: "/crosshairs" },
+      openGraph: { title: `${title}｜ClutchNest`, description, url: "/crosshairs" }
+    };
+  }
+
   const params = await searchParams;
   const team = Array.isArray(params.team) ? params.team[0] : params.team;
   const contentType = Array.isArray(params.type) ? params.type[0] : params.type;

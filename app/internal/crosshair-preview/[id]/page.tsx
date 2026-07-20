@@ -13,8 +13,6 @@ export const metadata: Metadata = {
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  if (process.env.NODE_ENV === "production") return [];
-
   return publishedCrosshairs
     .filter((crosshair) => crosshair.contentType === "pro-reference")
     .map((crosshair) => ({ id: crosshair.id }));

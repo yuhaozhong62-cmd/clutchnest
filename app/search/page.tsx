@@ -4,15 +4,22 @@ import { SearchPageClient } from "@/components/search/SearchPageClient";
 
 type SearchPageProps = { searchParams: Promise<{ q?: string | string[] }> };
 
+const staticSearchMetadata: Metadata = {
+  title: "搜索",
+  description: "搜索 ClutchNest 中的 VALORANT 准星、高分主播、职业选手、战队、英雄、地图与实战打法。",
+  robots: { index: false, follow: true },
+  alternates: { canonical: "/search" }
+};
+
 export async function generateMetadata({ searchParams }: SearchPageProps): Promise<Metadata> {
+  if (process.env.CLUTCHNEST_STATIC_EXPORT === "1") return staticSearchMetadata;
+
   const params = await searchParams;
   const query = Array.isArray(params.q) ? params.q[0] : params.q;
   const cleanQuery = query?.trim();
   return {
-    title: cleanQuery ? `“${cleanQuery}”的搜索结果` : "搜索",
-    description: "搜索 ClutchNest 中的 VALORANT 准星、高分主播、职业选手、战队、英雄、地图与实战打法。",
-    robots: { index: false, follow: true },
-    alternates: { canonical: "/search" }
+    ...staticSearchMetadata,
+    title: cleanQuery ? `“${cleanQuery}”的搜索结果` : staticSearchMetadata.title
   };
 }
 

@@ -12,6 +12,7 @@ out/
 *.log
 work/
 outputs/
+artifacts/
 
 # Editor and operating system files
 .DS_Store

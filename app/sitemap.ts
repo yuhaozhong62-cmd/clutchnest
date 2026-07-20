@@ -2,6 +2,8 @@ import type { MetadataRoute } from "next";
 import { publishedCrosshairs } from "@/lib/data/crosshairs";
 import { site } from "@/lib/site";
 
+export const dynamic = "force-static";
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticPages = [
     { path: "/", changeFrequency: "weekly", priority: 1 },
